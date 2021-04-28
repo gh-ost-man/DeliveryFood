@@ -28,20 +28,45 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-    ];
-    if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-    } else {
-        $menuItems[] = '<li>'
+        NavBar::begin([
+            'brandLabel' => Yii::$app->name,
+            'brandUrl' => Yii::$app->homeUrl,
+            'options' => [
+                'class' => 'navbar-inverse navbar-fixed-top',
+            ],
+        ]);
+        $menu_home = [
+            'label' => 'Home',
+            'url' => ['/site/index']
+        ];
+        $menu_tovar = [
+            'label' => 'tovar',
+            'url' => ['/tovar/index'],
+        ];
+        $menu_category = [
+            'label' => 'category',
+            'url' => ['/category/index'],
+        ];
+        $menu_promotion = [
+            'label' => 'promotion',
+            'url' => ['/promotion/index'],
+        ];
+        $menu_discount = [
+            'label' => 'discount',
+            'url' => ['/discount/index'],
+        ];
+        $menu_user = [
+            'label' => 'user',
+            'url' => ['/admin/index'],
+        ];
+
+        $menuItems = [];
+        if (Yii::$app->user->isGuest){
+            $menuItems[] = $menu_home; 
+            $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+
+        } else  {
+            $menu_logout = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
@@ -49,16 +74,28 @@ AppAsset::register($this);
             )
             . Html::endForm()
             . '</li>';
-    }
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
-    ]);
-    NavBar::end();
+
+            // if(Yii::$app->user->can('admin')){
+            // }
+            $menuItems[] = $menu_category;
+            $menuItems[] = $menu_promotion;
+            $menuItems[] = $menu_discount;
+            $menuItems[] = $menu_user;
+            $menuItems[] = $menu_tovar;
+            $menuItems[] = $menu_logout;
+        }
+
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav navbar-right'],
+            'items' => $menuItems,
+        ]);
+        NavBar::end();
     ?>
 
     <div class="container">
-        <?= Breadcrumbs::widget([
+        <?= Breadcrumbs::widget(['homeLink' => [
+            'label' => 'Головна'
+        ],
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
