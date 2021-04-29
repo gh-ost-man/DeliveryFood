@@ -11,7 +11,7 @@ class PromotionForm extends Model
    public string $title;
    public string $type;
    public int $promotion_value;
-   public string $url_image;
+   public string $promotion_image;
    public int $category_id;
    public int $product_id;
    public DateTime $dtStart;
@@ -22,7 +22,7 @@ class PromotionForm extends Model
         return [
             [['title', 'description'], 'string', 'message' => 'Invalid field type'],
             [['title', 'description','promotion_value','type', 'dtStart','dtEnd'], 'required', 'message' => 'The value is required'],
-            [['url_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
+            [['promotion_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
         ];
     }
 
