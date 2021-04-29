@@ -14,6 +14,7 @@ class CategoryForm extends Model
             [['title',], 'string', 'message' => 'Invalid field type'],
             [['title',], 'required', 'message' => 'The value is required']
         ];
+        
     }
 
     public function attributeLabels()
