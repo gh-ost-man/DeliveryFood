@@ -39,27 +39,27 @@ AppAsset::register($this);
             'label' => 'Home',
             'url' => ['/site/index']
         ];
-        $menu_tovar = [
-            'label' => 'tovar',
-            'url' => ['/tovar/index'],
+        $menu_product = [
+            'label' => 'Products',
+            'url' => ['/product/index'],
         ];
         $menu_category = [
-            'label' => 'category',
+            'label' => 'Categories',
             'url' => ['/category/index'],
         ];
         $menu_promotion = [
-            'label' => 'promotion',
+            'label' => 'Promotions',
             'url' => ['/promotion/index'],
         ];
-        $menu_discount = [
-            'label' => 'discount',
-            'url' => ['/discount/index'],
-        ];
+       
         $menu_user = [
-            'label' => 'user',
-            'url' => ['/admin/index'],
+            'label' => 'Users',
+            'url' => ['/user/index'],
         ];
-
+        $menu_order = [
+            'label' => 'Orders',
+            'url' => ['/order/index']
+        ];
         $menuItems = [];
         if (Yii::$app->user->isGuest){
             $menuItems[] = $menu_home; 
@@ -78,10 +78,10 @@ AppAsset::register($this);
             // if(Yii::$app->user->can('admin')){
             // }
             $menuItems[] = $menu_category;
+            $menuItems[] = $menu_product;
             $menuItems[] = $menu_promotion;
-            $menuItems[] = $menu_discount;
+            $menuItems[] = $menu_order;
             $menuItems[] = $menu_user;
-            $menuItems[] = $menu_tovar;
             $menuItems[] = $menu_logout;
         }
 
