@@ -18,6 +18,22 @@
    
     class UserController extends Controller
     {
+        public function behaviors()
+        {
+            return [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => [],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['admin','owner','manager'],
+                        ]
+                    ],
+                ],
+            ];
+        }
+
         public function actionIndex()
         {
             $role = Yii::$app->AuthManager->Roles;

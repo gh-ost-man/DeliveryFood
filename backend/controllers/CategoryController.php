@@ -31,12 +31,10 @@
         
         public function actionIndex()
         {
-            $dataProvider = new ActiveDataProvider([
-                'query' => Category::find(),
-            ]);
+            $categories = Category::find()->asArray()->all();
 
             return $this->render('index',[
-                'dataProvider' => $dataProvider
+                'categories' => $categories
             ]);
         }
 
