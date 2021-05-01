@@ -115,27 +115,4 @@
             
             return  $this->redirect(['category/index']);
         }
-
-        public function actionView($id){
-            $model = new CategoryForm;
-            $category = Category::findOne(['id' => $id]);
-
-            if($model->load(Yii::$app->request->post()))
-            { 
-                $category->title = $model->title; 
-                return  $this->redirect(['category/index']);
-            }
-
-            $model->title = $category->title;
-            $initialPreview = [];
-            $initialConfig = [];
-    
-            return $this->render('view', [
-                'model' => $model,
-                'initialPreview' => $initialPreview,
-                'category_id'=> $category->id,
-                'initialConfig' =>  $initialConfig,
-            ]);
-
-        }
 }
