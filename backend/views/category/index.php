@@ -26,13 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'id',
                 'title',
                 [
-                    'class' => 'yii\grid\ActionColumn', 'template' => '{view} {update} {delete}',
+                    'class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}',
                     'contentOptions' => ['style' => 'width: 30%'],
                     'buttons' => [
                         
-                        'view' => function ($url, $model, $key){
-                            return Html::a('View', ['view','id' => $model->id], ['class' => 'btn btn-info']);
-                        },
                         'update' => function ($url, $model, $key){
                             return Html::a('Update', ['update','id' => $model->id], ['class' => 'btn btn-success']);
                         },
