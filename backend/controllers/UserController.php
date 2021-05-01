@@ -7,8 +7,11 @@
     use yii\data\ActiveDataProvider;
     use yii\helpers\ArrayHelper;
     use yii\filters\AccessControl;
+    
+    use frontend\models\SignupForm;
 
     use common\models\User;
+    
     use backend\models\Order;
     use backend\models\Item_Order;
     use backend\models\Product;
@@ -39,7 +42,6 @@
                     'role' => $role 
                 ];
             }            
-
         
             return  $this->render('index', [
                 'user_array' => $user_array,
@@ -115,7 +117,7 @@
         {
             $order = Order::find()->where(['id' => $id])->one();
             $items_order = Item_Order::findAll(['order_id' => $id]);
-
+            
             $items = [];
             foreach($items_order as $item) {
                 $product = Product::find()->where(['id'=> $item->product_id])->one();
@@ -134,13 +136,49 @@
         public function actionDelete($id)
         {
             $user = User::findOne(['id' => $id]);
+            $current_user_id =  Yii::$app->user->id;
           
             if($user->delete(['id' => $id])) {
                 Yii::$app->session->setFlash('success', "User: < {$user->username} > removed from Database");
                 Yii::$app->AuthManager->revokeAll($id);
+                if($id == $current_user_id) {
+                    Yii::$app->user->logout();
+                    return $this->goHome();
+                }
             } else {
                 Yii::$app->session->setFlash('error', 'Error deleting user from Database');
             }
             return $this->redirect(['user/index']);
         }
+
+        public function actionProfile()
+        {
+            $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+
+            $model = new SignupForm();
+            $model->username = $user->username;
+            $model->email = $user->email;
+            $model->password = '';
+            
+            if ($model->load(Yii::$app->request->post())) {
+
+                $user->username = $model->username;
+                $user->email = $model->email;
+                $user->password = $model->password;
+                if($user->save()){
+                    $model->password = '';
+                    Yii::$app->session->setFlash('success', 'Data updated.');
+                    return $this->render('profile',[
+                        'model' => $model
+                    ]);
+                }
+            }
+    
+
+            return $this->render('profile',[
+                'model' => $model
+            ]);
+        }
+
+
     }

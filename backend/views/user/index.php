@@ -33,9 +33,9 @@ $this->registerJS($js);
 
 <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading">Users</div>
+  <div class="panel-heading"><h4>Users</h4></div>
   <!-- Table -->
-  <table class="table padding" >
+  <table class="table padding">
     <thead style="background-color: #22262A; color: white;">
       <tr>
         <th scope="col">#</th>

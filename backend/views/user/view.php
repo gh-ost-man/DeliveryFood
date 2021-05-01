@@ -32,10 +32,9 @@
     $this->registerJS($js);
 ?>
 
-
 <div class="panel panel-default">
     <!-- Default panel contents -->
-    <div class="panel-heading"><?= $user['email']?></div>
+    <div class="panel-heading"><h4>View</h4></div>
     <div  class="panel-body">
         <p class="h3" style="font-weight: 600;">Id: <?= $user['id']?></p>
         <p class="h3" style="font-weight: 600;">Username: <?= $user['username']?></p>
@@ -48,6 +47,7 @@
                 'value' =>$role,
                 'options' => [
                     'class' => 'role',
+                    'width' => '50px',
                     'placeholder' => 'Select provinces ...',
                 'multiple' => false
                 ],

@@ -5,9 +5,8 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 
 use kartik\select2\Select2;
-
-$this->title = 'Order History';
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->title = 'Items Order';
+$this->params['breadcrumbs'][] = ['label' => 'Order History', 'url' => [$order->user_id . "history"]];
 $this->params['breadcrumbs'][] = $this->title;
 
 $i = 1;
@@ -16,9 +15,9 @@ $j = 1;
 
 <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading">Items Order</div>
+  <div class="panel-heading"><h4>Items Order</h4></div>
   <!-- Table -->
-  <table class="table padding" >
+  <table class="table" >
     <thead style="background-color: #22262A; color: white;">
       <tr>
         <th scope="col">#</th>
@@ -41,7 +40,7 @@ $j = 1;
         </tr>
     </tbody>
   </table>
-  <table class="table padding" >
+  <table class="table" >
     <thead style="background-color: #22262A; color: white;">
       <tr>
         <th scope="col">#</th>

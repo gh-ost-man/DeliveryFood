@@ -10,6 +10,8 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 
+use \yii\bootstrap4\Dropdown ;
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -19,9 +21,11 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>  *{ font-family: 'Consolas' }  </style>
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -29,7 +33,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
         NavBar::begin([
-            'brandLabel' => Yii::$app->name,
+            'brandLabel' => "Delivery Food",
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-inverse navbar-fixed-top',
@@ -60,6 +64,10 @@ AppAsset::register($this);
             'label' => 'Orders',
             'url' => ['/order/index']
         ];
+        $menu_profile= [
+            'label' => 'Profile',
+            'url' => ['/user/profile']
+        ];
         $menuItems = [];
         if (Yii::$app->user->isGuest){
             $menuItems[] = $menu_home; 
@@ -82,6 +90,7 @@ AppAsset::register($this);
             $menuItems[] = $menu_promotion;
             $menuItems[] = $menu_order;
             $menuItems[] = $menu_user;
+            $menuItems[] = $menu_profile;
             $menuItems[] = $menu_logout;
         }
 
@@ -91,7 +100,7 @@ AppAsset::register($this);
         ]);
         NavBar::end();
     ?>
-
+ 
     <div class="container">
         <?= Breadcrumbs::widget(['homeLink' => [
             'label' => 'Головна'
@@ -105,7 +114,9 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
+        <!-- <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p> -->
+        <p  class="pull-left">@Delivery Food</p>
+
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

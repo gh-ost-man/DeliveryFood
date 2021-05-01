@@ -15,9 +15,9 @@ $i = 1;
 
 <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading">History</div>
+  <div class="panel-heading"><h4>History</h4></div>
   <!-- Table -->
-  <table class="table padding" >
+  <table class="table" >
     <thead style="background-color: #22262A; color: white;">
       <tr>
         <th scope="col">#</th>
