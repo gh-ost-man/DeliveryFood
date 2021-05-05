@@ -3,14 +3,14 @@
 
     use Yii;
     use \yii\db\ActiveRecord;
-
+//s
     /**
      * 
      * @property int $id
      * @property string $title
      * @property string $type
      * @property int $promotion_value
-     * @property string $promotion_image
+     * @property string $promotion_url
      * @property int $category_id
      * @property int $product_id
      * @property DateTime $dtStart
