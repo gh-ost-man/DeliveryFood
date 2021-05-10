@@ -63,6 +63,7 @@ AppAsset::register($this);
         if (Yii::$app->user->isGuest) {
             $menuItems[] = ['label' => 'About us', 'url' => ['#']];
             $menuItems[] = ['label' => 'Basket', 'url' => ['#']];
+            $menuItems[] = ['label' => 'Sign in', 'url' => ['#']];
             $menuItems[] = ['label' => 'Sign up', 'url' => ['#']];
             $menuItems[] = ['label' => 'Login', 'url' => ['#']];
         } else {
@@ -102,11 +103,10 @@ AppAsset::register($this);
     </div>
 </div>
 
-<footer class="footer">
+<footer class="footer bg-nav">
     <div class="container">
-        <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <!-- <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p> -->
+        <p class="pull-left text-white">@Delivery Food</p>
     </div>
 </footer>
 
