@@ -29,9 +29,8 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
-<div class="wrap text-white">
-    <?php
-        $this->registerCss(
+<?php 
+    $this->registerCss(
         " 
             #w0-collapse
             {
@@ -47,63 +46,38 @@ AppAsset::register($this);
             }
         "
         );
+?>
 
-        NavBar::begin([
-            'brandLabel' => Yii::$app->name,
-            'brandUrl' => Yii::$app->homeUrl,
-            'options' => [
-                'class' => 'navbar navbar-dark bg-nav  navbar-expand-md ',
-            ],
-        ]);
-        // $menuItems = [
-        //     ['label' => 'Home', 'url' => ['/site/index']],
-        //     ['label' => 'About', 'url' => ['/site/about']],
-        //     ['label' => 'Contact', 'url' => ['/site/contact']],
-        // ];
-        if (Yii::$app->user->isGuest) {
-            $menuItems[] = ['label' => 'About us', 'url' => ['#']];
-            $menuItems[] = ['label' => 'Basket', 'url' => ['#']];
-            $menuItems[] = ['label' => 'Sign up', 'url' => ['#']];
-            $menuItems[] = ['label' => 'Login', 'url' => ['#']];
-        } else {
-            $menuItems[] = '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn text-white']
-                )
-                . Html::endForm()
-                . '</li>';
-        }
+<div class="wrap">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-nav">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- <a class="nav-link" href="#">Link</a> -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto"></ul>
+            <form class="form-inline my-2 my-lg-0">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="#">About us</a>
+                    <a class="nav-link" href="#">Sign in</a>
+                    <a class="nav-link" href="#">Sign up</a>
+                    <a class="nav-link" href="#">Basket</a>
+                </div>
 
-       
-        echo Nav::widget([
-            'options' => ['class' => 'navbar-nav nav-dark nav-pills'],
-            'items' => $menuItems,
-        ]);
 
-    
-        if(Yii::$app->user->id != null){
-            echo Html::tag('a', 'Basket', ['class' => 'btn btn-info', 'href' => Yii::$app->homeUrl . 'tovar/basket']);
-        }
-        ?>
-        <?php
-    
-        NavBar::end();
-      
-    ?>
-
-    <div class="container ">
-        <?= Breadcrumbs::widget([
-          'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <!-- <?= Alert::widget() ?> -->
-        <?= $content ?>
-    </div>
+            </form>
+        </div>
+    </nav>
+    <?= Breadcrumbs::widget([
+        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+    ]) ?>
+    <!-- <?= Alert::widget() ?> -->
+    <?= $content ?>
 </div>
 
 <footer class="footer bg-nav">
-    <div class="container">
+    <div class="container-fluid">
         <!-- <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p> -->
         <p class="pull-left text-white">@Delivery Food</p>
     </div>

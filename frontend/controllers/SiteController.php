@@ -15,6 +15,10 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 
+use common\models\Category;
+// use common\models\Promotion;
+// use common\models\Tovar;
+
 /**
  * Site controller
  */
@@ -74,7 +78,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $categories = Category::find()->all();
+
+        return $this->render('index',[
+            'categories' => $categories
+        ]);
     }
 
     /**
