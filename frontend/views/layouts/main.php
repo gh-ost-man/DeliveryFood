@@ -4,11 +4,16 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
-use yii\widgets\Breadcrumbs;
+
+use yii\bootstrap4\Breadcrumbs;
 use frontend\assets\AppAsset;
-use common\widgets\Alert;
+use yii\bootstrap4\Alert;
+
+use common\models\Category;
 
 AppAsset::register($this);
 ?>
@@ -49,39 +54,97 @@ AppAsset::register($this);
 ?>
 
 <div class="wrap">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-nav">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- <a class="nav-link" href="#">Link</a> -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto"></ul>
-            <form class="form-inline my-2 my-lg-0">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="#">About us</a>
-                    <a class="nav-link" href="#">Sign in</a>
-                    <a class="nav-link" href="#">Sign up</a>
-                    <a class="nav-link" href="#">Basket</a>
-                </div>
+   
+    <?php
+        $this->registerCss(
+        " 
+            #w0-collapse
+            {
+                flex-grow: 0; 
+            }
+            #menu 
+            {
+                list-type: none;
+            }
+            .bg-nav
+            {
+                background-color: rgba(34,38,42,255);
+            }
+        "
+        );
+
+        NavBar::begin([
+            'brandLabel' => Yii::$app->name,
+            'brandUrl' => Yii::$app->homeUrl,
+            'options' => [
+                'class' => 'navbar navbar-expand-lg navbar-dark bg-nav m-0 p-0',
+            ],
+        ]);
+        // $menuItems = [
+        //     ['label' => 'Home', 'url' => ['/site/index']],
+        //     ['label' => 'About', 'url' => ['/site/about']],
+        //     ['label' => 'Contact', 'url' => ['/site/contact']],
+        // ];
+        if (Yii::$app->user->isGuest) {
+            $menuItems[] = ['label' => 'About us', 'url' => ['/shop/about']];
+            $menuItems[] = ['label' => 'Basket', 'url' =>  ['/shop/basket']];
+            $menuItems[] = ['label' => 'Sign up', 'url' => ['/site/signup']];
+            $menuItems[] = ['label' => 'Sign in', 'url' => ['/site/login']];
+        } else {
+            $menuItems[] = ['label' => 'About us', 'url' => ['/shop/about']];
+            $menuItems[] = ['label' => 'Basket', 'url' =>  ['/shop/basket']];
+
+            $menuItems[] = '<li>'
+                . Html::beginForm(['/site/logout'], 'post')
+                . Html::submitButton(
+                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    ['class' => 'btn text-white']
+                )
+                . Html::endForm()
+                . '</li>';
+        }
+
+       
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav nav-dark nav-pills'],
+            'items' => $menuItems,
+        ]);
 
 
-            </form>
+        NavBar::end();
+    ?>
+
+    <div class="bg-nav">
+        <div class="container">
+            <?php foreach(Category::find()->all() as $category) : ?>
+                <a class="text-white" href="<?= Url::to(["/shop/" . $category->id . "view"]) ?>"><?= $category->title; ?></a>
+            <?php endforeach ?>
         </div>
-    </nav>
-    <?= Breadcrumbs::widget([
-        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-    ]) ?>
-    <!-- <?= Alert::widget() ?> -->
-    <?= $content ?>
+    </div>
+  
+    <div class="container">
+        <?= Breadcrumbs::widget([
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        ]) ?>
+        <!-- <?= Alert::widget() ?> -->
+        <?= $content ?>
+    </div>
+
+    <script>
+        $('a.active').css('background-color', 'black');
+    </script>       
+  
 </div>
 
+
 <footer class="footer bg-nav">
-    <div class="container-fluid">
+    <div class="container">
         <!-- <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p> -->
         <p class="pull-left text-white">@Delivery Food</p>
     </div>
 </footer>
+
+
 
 <?php $this->endBody() ?>
 </body>

@@ -15,6 +15,9 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 
+use yii\helpers\Html;
+use yii\helpers\Url;
+
 use common\models\Category;
 // use common\models\Promotion;
 // use common\models\Tovar;
@@ -78,10 +81,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $categories = Category::find()->all();
-
         return $this->render('index',[
-            'categories' => $categories
+            'categories' => Category::find()->all()
         ]);
     }
 
@@ -104,6 +105,7 @@ class SiteController extends Controller
 
             return $this->render('login', [
                 'model' => $model,
+                'categories' => Category::find()->all()
             ]);
         }
     }
@@ -139,6 +141,7 @@ class SiteController extends Controller
         } else {
             return $this->render('contact', [
                 'model' => $model,
+                'categories' => Category::find()->all()
             ]);
         }
     }
@@ -168,6 +171,7 @@ class SiteController extends Controller
 
         return $this->render('signup', [
             'model' => $model,
+            'categories' => Category::find()->all()
         ]);
     }
 
@@ -191,6 +195,7 @@ class SiteController extends Controller
 
         return $this->render('requestPasswordResetToken', [
             'model' => $model,
+            'categories' => Category::find()->all()
         ]);
     }
 
@@ -217,6 +222,7 @@ class SiteController extends Controller
 
         return $this->render('resetPassword', [
             'model' => $model,
+            'categories' => Category::find()->all()
         ]);
     }
 

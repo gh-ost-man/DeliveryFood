@@ -19,10 +19,22 @@
     {
         public function actionView($id)
         {
-            $this->render('view',[
+           return $this->render('view',[
                 'products' => []
             ]);
         }   
+
+        public function actionBasket()
+        {
+           return $this->render('/shop/basket',[
+                'val' => 'Hello'
+            ]);
+        }
+
+        public function actionAbout()
+        {
+            return $this->render('about');
+        }
 
     }
     
