@@ -8,7 +8,7 @@ use kartik\widgets\FileInput;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Create category';
-$this->params['breadcrumbs'][] = ['label' => 'Category', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

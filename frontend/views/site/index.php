@@ -1,6 +1,21 @@
 <?php
 
 /* @var $this yii\web\View */
+
+use yii\helpers\Html;
+use yii\helpers\Url;
+
+$this->title = 'Delivery Food';
+
+$this->registerCss(
+    `
+        .bg-nav
+        {
+            background-color: rgba(34,38,42,255);
+        }
+    `);
+?>
+<div class="container-fluid">
 ?>
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
@@ -74,6 +89,7 @@
       </div>
     </div>
   </div>
+
 </div>
 
 <img src="..\images\map.jpg" class="img-fluid w-100"  style="height: 500px;" alt="...">
