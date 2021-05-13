@@ -17,8 +17,8 @@ class ProductForm extends Model
             [['title', 'description'], 'string', 'message' => 'Invalid field type'],
             [['category_id'], 'integer', 'min' => 0],
             [['price'], 'double', 'min' => 0],
-            [['title', 'description', 'category_id', 'price'], 'required', 'message' => 'The value is required'],
-            [['url_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
+            [['title', 'description', 'category_id', 'price','url_image'], 'required', 'message' => 'The value is required'],
+            // [['url_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
         ]; 
     }
 
@@ -28,7 +28,23 @@ class ProductForm extends Model
             'title' => 'Title',
             'description' => 'Description',
             'category_id' => 'Category',
-            'price' => 'Price'
+            'price' => 'Price',
+            'url_image' => 'Image' 
         ];
+    }
+    public function upload()
+    {
+        if($this->validate()){
+            $result = [];
+
+            foreach($this->url_image as $file){
+                $fileName = md5(microtime() . rand(0, 1000));
+                $imagePath = '../../images/product/' . $fileName . '.' . $file->extension;
+                $file->saveAs($imagePath);
+                $result[] = $imagePath;
+            }
+            return $result;
+        }
+        return false;
     }
 }
