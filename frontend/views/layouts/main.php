@@ -50,7 +50,7 @@ AppAsset::register($this);
 
 <div class="wrap">
     <nav class="navbar navbar-expand-lg navbar-dark bg-nav">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="#">Delivery Food</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -64,8 +64,6 @@ AppAsset::register($this);
                     <a class="nav-link" href="#">Sign up</a>
                     <a class="nav-link" href="#">Basket</a>
                 </div>
-
-
             </form>
         </div>
     </nav>
