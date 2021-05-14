@@ -54,7 +54,6 @@ AppAsset::register($this);
 ?>
 
 <div class="wrap">
-   
     <?php
         $this->registerCss(
         " 
