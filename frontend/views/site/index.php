@@ -56,45 +56,7 @@ $this->registerCss(
   <?php
  }
 ?>
-  <div class="col mb-4">
-    <div class="card h-100">
-      <img src="\images\Sakura.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a short card.</p>  
-      </div>
-      <div class="card-footer">
-            <h4 class="float-left w-50">135$</h4>
-            <a href="*" class="btn btn-success float-right">To basket</a>
-      </div>
-    </div>
-  </div>
-  <div class="col mb-4">
-  <div class="card h-100">
-      <img src="\images\Sakura.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a short card.</p>  
-      </div>
-      <div class="card-footer">
-            <h4 class="float-left w-50">135$</h4>
-            <a href="*" class="btn btn-success float-right">To basket</a>
-      </div>
-    </div>
-  </div>
-  <div class="col mb-4">
-  <div class="card h-100">
-      <img src="\images\Sakura.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a short card.</p>  
-      </div>
-      <div class="card-footer">
-            <h4 class="float-left w-50">135$</h4>
-            <a href="*" class="btn btn-success float-right">To basket</a>
-      </div>
-    </div>
-  </div>
+  
 
 </div>
 
