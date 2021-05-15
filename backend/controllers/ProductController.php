@@ -9,7 +9,7 @@
     use yii\filters\AccessControl;
 
     use common\models\Category;
-    use backend\models\Product;
+    use common\models\Product;
     use backend\models\ProductForm;
    
     class ProductController extends Controller

@@ -14,7 +14,7 @@
     
     use backend\models\Order;
     use backend\models\Item_Order;
-    use backend\models\Product;
+    use common\models\Product;
    
     class UserController extends Controller
     {

@@ -19,6 +19,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 use common\models\Category;
+use common\models\Product;
 // use common\models\Promotion;
 // use common\models\Tovar;
 
@@ -82,7 +83,8 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index',[
-            'categories' => Category::find()->all()
+            'categories' => Category::find()->all(),
+            'products' => Product::find()->all()
         ]);
     }
 
