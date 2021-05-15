@@ -3,10 +3,10 @@
     <hr style="border: 1px solid black;">
     <div class="card border-0" style="max-width: 100%;">
     <div class="row no-gutters">
-        <div class="col-md-4">
-        <img src="\images\about\about.jpg" style="width: 80%">
+        <div class="col-md-6">
+        <img src="\images\about\about.jpg" style="width: 100%">
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
         <div class="card-body">
             <p class="card-text text-justify">Food Deivery це команда професіоналів та ентузіастів смачної кухні, яка Вас ніколи не підведе. Ми готуємо смачні та корисні страви японської та італійської кухонь та швидко доставляємо їх прямісінько до Вас по всьому м. Львів.
                                     Якість та Швидкість!  - це два основних пріоритети в роботі команди. 
