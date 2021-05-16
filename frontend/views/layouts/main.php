@@ -12,7 +12,7 @@ use yii\bootstrap4\NavBar;
 
 use yii\bootstrap4\Breadcrumbs;
 use frontend\assets\AppAsset;
-use yii\bootstrap4\Alert;
+use common\widgets\Alert;
 
 use common\models\Category;
 
@@ -30,6 +30,7 @@ AppAsset::register($this);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
 </head>
 <body>
@@ -80,19 +81,15 @@ AppAsset::register($this);
                 'class' => 'navbar navbar-expand-lg navbar-dark bg-nav m-0 p-0',
             ],
         ]);
-        // $menuItems = [
-        //     ['label' => 'Home', 'url' => ['/site/index']],
-        //     ['label' => 'About', 'url' => ['/site/about']],
-        //     ['label' => 'Contact', 'url' => ['/site/contact']],
-        // ];
+      
         if (Yii::$app->user->isGuest) {
             $menuItems[] = ['label' => 'About us', 'url' => ['/shop/about']];
-            $menuItems[] = ['label' => 'Basket', 'url' =>  ['/shop/basket']];
+            $menuItems[] = ['label' => 'Basket', 'url' =>  ['/basket/index']];
             $menuItems[] = ['label' => 'Sign up', 'url' => ['/site/signup']];
             $menuItems[] = ['label' => 'Sign in', 'url' => ['/site/login']];
         } else {
             $menuItems[] = ['label' => 'About us', 'url' => ['/shop/about']];
-            $menuItems[] = ['label' => 'Basket', 'url' =>  ['/shop/basket']];
+            $menuItems[] = ['label' => 'Basket', 'url' =>  ['/basket/index']];
 
             $menuItems[] = '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
@@ -103,13 +100,11 @@ AppAsset::register($this);
                 . Html::endForm()
                 . '</li>';
         }
-
        
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav nav-dark nav-pills'],
             'items' => $menuItems,
         ]);
-
 
         NavBar::end();
     ?>
@@ -126,7 +121,7 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
-        <!-- <?= Alert::widget() ?> -->
+        <?= Alert::widget() ?>
         <?= $content ?>
     </div>
 
@@ -143,8 +138,6 @@ AppAsset::register($this);
         <p class="pull-left text-white">@Delivery Food</p>
     </div>
 </footer>
-
-
 
 <?php $this->endBody() ?>
 </body>

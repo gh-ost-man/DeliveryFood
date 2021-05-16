@@ -45,7 +45,7 @@ $this->registerCss(
             </div>
             <div class="card-footer">
                   <h4 class="float-left w-50"><?= $value->price?>$</h4>
-                  <a href="*" class="btn btn-success float-right">To basket</a>
+                  <a href="<?= Url::to(['basket/'. $value->id .'add-item']) ?>" class="btn btn-success float-right">To basket</a>
             </div>
           </div>
       </div>
