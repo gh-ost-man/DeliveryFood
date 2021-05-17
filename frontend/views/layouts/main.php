@@ -11,6 +11,7 @@ use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 
 use yii\bootstrap4\Breadcrumbs;
+// use yii\bootstrap4\Alert;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
@@ -54,7 +55,6 @@ AppAsset::register($this);
         "
         );
 ?>
-
 <div class="wrap">
     <?php
         $this->registerCss(
@@ -78,7 +78,7 @@ AppAsset::register($this);
             'brandLabel' => "Delivery Food",
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
-                'class' => 'navbar navbar-expand-lg navbar-dark bg-nav m-0 p-0',
+                'class' => 'navbar navbar-expand-lg navbar-dark bg-nav p-0 m-0',
             ],
         ]);
       
@@ -117,19 +117,26 @@ AppAsset::register($this);
         </div>
     </div>
   
-    <div class="container">
+    <div class="container p-1">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
+        ]) ?> 
+        
+        <?php if(isset($_SESSION['success'])) :?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><?= $_SESSION['success'] ?></strong> 
 
-    <script>
-        $('a.active').css('background-color', 'black');
-    </script>       
-  
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endif?>
+        <?php unset($_SESSION['success'])?>
+        <?= $content ?>
+
+    </div>
 </div>
+
 
 
 <footer class="footer bg-nav">
@@ -138,6 +145,10 @@ AppAsset::register($this);
         <p class="pull-left text-white">@Delivery Food</p>
     </div>
 </footer>
+
+<script>
+    $('a.active').css('background-color', 'black');
+</script>       
 
 <?php $this->endBody() ?>
 </body>

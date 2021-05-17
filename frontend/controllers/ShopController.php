@@ -17,18 +17,22 @@
     {
         public function actionView($id)
         {
-            $products = Product::find()->where(['category_id' => $id])->all();
             $category = Category::find()->where(['id' => $id ])->one();
+            $products = Product::find()->where(['category_id' => $id])->all();
             
             return $this->render('view', [
-                'products' => $products,
-                'category' => $category
-            ]);
-
-            return $this->render('view',[
-                'products' => []
+                'category' => $category,
+                'products' => $products
             ]);
         }   
+
+    
+        public function actionItem($id) 
+        {
+            return $this->render('item', [
+                'product' => Product::find()->where(['id' => $id])->one()
+            ]);
+        }
 
         public function actionAbout()
         {

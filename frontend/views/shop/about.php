@@ -1,3 +1,10 @@
+<?php
+
+$this->title = 'About us';
+$this->params['breadcrumbs'][] = $this->title;
+?>
+
+
 <div class="mb-3">
     <h1 class="text-center">About us</h1>
     <hr style="border: 1px solid black;">

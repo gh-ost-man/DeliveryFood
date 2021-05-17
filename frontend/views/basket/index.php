@@ -4,6 +4,9 @@
     use yii\widgets\ActiveForm;
 
     $i = 1;
+
+    $this->title = 'Basket';
+    $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>       
   hr
@@ -16,7 +19,7 @@
 
 <h1>Basket</h1>
 <hr>
-<form id="test">
+<form id="pay-order">
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
@@ -29,39 +32,40 @@
             </div>
         </div>
         <div class="col-md-8">
-        <table class="table">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col"></th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Count</th>
-                    <th scope="col">Price</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach($products as $product) : ?>
-                <tr>
-                    <th scope="row"><?= $i++ ?></th>
-                    <td>
-                        <div>
-                            <img src="/<?= $product['url_image'][0] ?>" style="width:70px" alt="">
-                        </div>
-                    </td>
-                    <td><?= $product['title'] ?></td>
-                    <td>
-                        <input type="number" name="<?= isset($order->id)? $order->id: 'guest' ?>" id="<?= $product['id'] ?>" class="product-count" value="<?= $product['count'] ?>" min="1">
-                    <td class="price-<?= $product['id']?>"><?= $product['price'] ?> $</td>
-                </tr>
-            <?php endforeach?>
-            </tbody>
-        </table>
-            <h1 class="" style="font-size:30px">Total price: <span id="total"></span> $</h1>
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col"></th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach($products as $product) : ?>
+                    <tr>
+                        <th scope="row"><?= $i++ ?></th>
+                        <td>
+                            <div>
+                                <a href="<?= Url::to(['shop/'. $product['id'] .'item']) ?>">
+                                    <img src="/<?= $product['url_image'][0] ?>" style="width:70px" alt="">
+                                </a>
+                            </div>
+                        </td>
+                        <td><?= $product['title'] ?></td>
+                        <td>
+                            <input type="number" name="<?= isset($order->id)? $order->id: 'guest' ?>" id="<?= $product['id'] ?>" class="product-count" value="<?= $product['count'] ?>" min="1">
+                        <td class="price-<?= $product['id']?>"><?= $product['price'] ?> $</td>
+                    </tr>
+                <?php endforeach?>
+                </tbody>
+            </table>
+            <h1 style="font-size:30px">Total price: <span id="total"></span> $</h1>
             <button type="submit" class="btn btn-success">Submit</button>
             <a href="<?= Url::to(['/basket/cancel-order']) ?>" class='btn btn-danger'>Cancel order</a>
         </div>
     </div>
-    
 </form>
 
 <script>
@@ -109,7 +113,7 @@
 </script>
 
 <script>
-    $("#test").submit(function(event){
+    $("#pay-order").submit(function(event){
         event.preventDefault();// відміна відправки форми
 
         email = this.elements['email'].value;

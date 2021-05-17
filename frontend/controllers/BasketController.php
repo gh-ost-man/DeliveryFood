@@ -194,9 +194,10 @@ class BasketController extends Controller {
                 $order->status = 'booked';
                 $order->total_price = $total;
                 $order->address = $_POST['address'];
-                $order->save();
-    
-               return $this->redirect('/site/index');
+            
+               if($order->save()) {
+                    Yii::$app->session->setFlash('success', "Order removed from database");
+               } 
             }
         } else {
 
@@ -231,6 +232,7 @@ class BasketController extends Controller {
             $order->total_price = $total;
             $order->address = $_POST['address'];
             if($order->save()) {
+                Yii::$app->session->setFlash('success', "Order booked");
                 setcookie("delivery_food_basket", "", time() - ( 60 * 60 * 24 * 10 ));
             }
         }
