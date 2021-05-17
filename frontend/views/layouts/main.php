@@ -75,7 +75,7 @@ AppAsset::register($this);
         );
 
         NavBar::begin([
-            'brandLabel' => Yii::$app->name,
+            'brandLabel' => "Delivery Food",
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar navbar-expand-lg navbar-dark bg-nav m-0 p-0',

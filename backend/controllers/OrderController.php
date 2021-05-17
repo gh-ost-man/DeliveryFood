@@ -18,9 +18,14 @@
         public function actionIndex()
         {
             $users = [];
+            $guests = [];
             $orders = Order::find()->all();
             foreach($orders as $order){
-                $users[$order->user_id] = User::find()->where(['id' => $order->user_id])->one();
+                if(isset($order->user_id)){
+                    $users[$order->user_id] = User::find()->where(['id' => $order->user_id])->one();
+                } else {
+                    $users[$order->guest] = $order->guest;
+                }
             }
 
             return $this->render('index',[
@@ -33,9 +38,11 @@
             $order = Order::find()->where(['id' => $id])->one();
             $items_order = Item_Order::findAll(['order_id' => $id]);
             $user = User::find()->where(['id' => $order->user_id])->one();
-
+            $guest = $order->guest;
+        
             $items = [];
 
+            $status = '';
             foreach($items_order as $item) {
                 $product = Product::find()->where(['id'=> $item->product_id])->one();
                 $items[] =[
@@ -45,10 +52,19 @@
                     'count' => $item->count
                 ];
             }
+
+            if($user) {
+                $status='user';
+            } else {
+                $status = 'guest';
+            }
+
             return $this->render('order',[
                 'order' => $order,
                 'items_order' => $items,
-                'user' => $user
+                'user' => $user,
+                'guest' => $guest,
+                'status' => $status
             ]);
         }
 

@@ -50,7 +50,7 @@
                     </td>
                     <td><?= $product['title'] ?></td>
                     <td>
-                        <input type="number" name="<?= $order->id ?>" id="<?= $product['id'] ?>" class="product-count" value="<?= $product['count'] ?>" min="1">
+                        <input type="number" name="<?= isset($order->id)? $order->id: 'guest' ?>" id="<?= $product['id'] ?>" class="product-count" value="<?= $product['count'] ?>" min="1">
                     <td class="price-<?= $product['id']?>"><?= $product['price'] ?> $</td>
                 </tr>
             <?php endforeach?>
@@ -123,12 +123,4 @@
             },
         });
     });
-</script>
-
-
-<script>
-var d = new Date();//скільки cookies будуть жити
-        d.setTime(d.getTime() + 3 * 24 * 60 * 60 * 1000);
-console.log(d);
-
 </script>

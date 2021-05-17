@@ -23,7 +23,7 @@ $j = 1;
         <th scope="col">#</th>
         <th scope="col">Id</th>
         <th scope="col">Date</th>
-        <th scope="col">User</th>
+        <th scope="col"><?= ($status == 'user') ? 'User' : 'Guest';?>  </th>
         <th scope="col">Status</th>
         <th scope="col">Total price</th>
         <th scope="col">Address</th>
@@ -36,7 +36,13 @@ $j = 1;
             <th scope="row"><?= $order->id; ?></th>
             <td><?= (new DateTime(`$order->date_order`))->format('Y-m-d'); ?></td>
             <td>
-              <?=  Html::a($user->email, ['user/view','id' => $user->id], ['class' => ' ']);  ?>
+              <?php if ($status=='user') : ?>
+                <?=  Html::a($user->email, ['user/view','id' => $user->id], ['class' => ' ']);  ?>
+              <?php endif?>
+              <?php if ($status=='guest') : ?>
+                <p><?= $guest?></p>
+              <?php endif?>
+              
             </td>
             <td><?= $order->status?></td>
             <td><?= $order->total_price?></td>
