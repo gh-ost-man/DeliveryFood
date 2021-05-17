@@ -168,6 +168,7 @@ class BasketController extends Controller {
                 }
                 setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 )); //  time() +(60*60*24*10)) -> 10 days
             }
+            //d
             return false;
         }
 
