@@ -12,18 +12,9 @@
     use common\models\Category;
     use common\models\Product;
     use common\models\User;
-    use backend\models\Order;
-    use backend\models\Item_Order;
-    use backend\models\BasketForm;
-
-    // use common\models\Product;
-    // use common\models\Order;
-    // use common\models\Item_Order;
-    // use common\models\Promotion;
 
     class ShopController extends Controller
     {
-        public int $i = 0;
         public function actionView($id)
         {
             $products = Product::find()->where(['category_id' => $id])->all();
@@ -43,6 +34,5 @@
         {
             return $this->render('about');
         }
-    
     }
     

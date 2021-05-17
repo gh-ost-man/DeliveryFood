@@ -11,9 +11,8 @@ use yii\filters\AccessControl;
 use common\models\Category;
 use common\models\Product;
 use common\models\User;
-use backend\models\Order;
-use backend\models\Item_Order;
-use backend\models\BasketForm;
+use common\models\Order;
+use common\models\Item_Order;
 
 class BasketController extends Controller {
     
@@ -47,7 +46,6 @@ class BasketController extends Controller {
                 ]);
             }
         } else {
-
             if(isset($_COOKIE['delivery_food_basket'])){
                 $info = unserialize($_COOKIE['delivery_food_basket'], ["allowed_classes" => false]);
 
@@ -168,7 +166,6 @@ class BasketController extends Controller {
                 }
                 setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 )); //  time() +(60*60*24*10)) -> 10 days
             }
-            //d
             return false;
         }
 
