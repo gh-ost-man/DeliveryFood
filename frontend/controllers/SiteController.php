@@ -82,9 +82,24 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $product = Product::find()
+        ->orderBy('id')
+        ->asArray()
+        ->all();
+
+        $items = array_reverse($product, true);
+        $products = [];
+
+       for($i = 0; $i< count($items); $i++){
+           if($i >= 9 || $i == count($items)) break;
+            array_push($products, $items[$i]);
+       }
+
+
+
         return $this->render('index',[
             'categories' => Category::find()->all(),
-            'products' => Product::find()->all()
+            'products' => $products
         ]);
     }
 

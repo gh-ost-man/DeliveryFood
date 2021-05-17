@@ -15,8 +15,6 @@
     <div class="col-md-6">
         <h2 ><?= $product->title?></h2>
         <p><?= $product->description?></p>
-        <p><?= $product->description?></p>
-
         <div class="row">
             <div class="col-md-6">
                 <h2>Price: <?= $product->price ?> $</h2>

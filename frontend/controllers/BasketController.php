@@ -243,10 +243,17 @@ class BasketController extends Controller {
     {
         $idUser = Yii::$app->user->id;
 
-        $order = Order::find()->where(['user_id' => $idUser])->andWhere(['=','status','new'])->one();
+        if($idUser) {
+            $order = Order::find()->where(['user_id' => $idUser])->andWhere(['=','status','new'])->one();
 
-        if($order != null){
-            Item_Order::deleteAll(['order_id' => $order->id]);
+            if($order != null){
+                Item_Order::deleteAll(['order_id' => $order->id]);
+            }
+        } else {
+
+            if(isset($_COOKIE['delivery_food_basket'])) {
+                setcookie("delivery_food_basket", "", time() - ( 60 * 60 * 24 * 10 ));
+            }
         }
 
         return $this->redirect('index');
