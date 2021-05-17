@@ -38,18 +38,20 @@ $this->registerCss(
     <?php  foreach ($products as $key => $value) :  $image= json_decode($value->url_image,true) ?>
       <div class="col mb-4">
         <div class="card h-100">
+          <a href="<?= Url::to(['shop/'. $value->id .'item']) ?>">
             <img src="<?= $image[0]?>" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title"><?= $value->title?></h5>
-              <p class="card-text"><?= $value->description?></p>  
-            </div>
-            <div class="card-footer">
-                  <h4 class="float-left w-50"><?= $value->price?>$</h4>
-                  <a href="<?= Url::to(['basket/'. $value->id .'add-item']) ?>" class="btn btn-success float-right">To basket</a>
-            </div>
+          </a>
+          <div class="card-body">
+            <h5 class="card-title"><?= $value->title?></h5>
+            <p class="card-text"><?= $value->description?></p>  
           </div>
+          <div class="card-footer">
+            <h4 class="float-left w-50"><?= $value->price?>$</h4>
+            <a href="<?= Url::to(['basket/'. $value->id .'add-item']) ?>" class="btn btn-success float-right">To basket</a>
+          </div>
+        </div>
       </div>
-    <?php  endforeach  ?>
+    <?php  endforeach  ?> 
   </div>
 </div>
 

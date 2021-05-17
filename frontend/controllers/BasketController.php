@@ -11,9 +11,8 @@ use yii\filters\AccessControl;
 use common\models\Category;
 use common\models\Product;
 use common\models\User;
-use backend\models\Order;
-use backend\models\Item_Order;
-use backend\models\BasketForm;
+use common\models\Order;
+use common\models\Item_Order;
 
 class BasketController extends Controller {
     
@@ -196,9 +195,10 @@ class BasketController extends Controller {
                 $order->status = 'booked';
                 $order->total_price = $total;
                 $order->address = $_POST['address'];
-                $order->save();
-    
-               return $this->redirect('/site/index');
+            
+               if($order->save()) {
+                    Yii::$app->session->setFlash('success', "Order removed from database");
+               } 
             }
         } else {
 
@@ -233,6 +233,7 @@ class BasketController extends Controller {
             $order->total_price = $total;
             $order->address = $_POST['address'];
             if($order->save()) {
+                Yii::$app->session->setFlash('success', "Order booked");
                 setcookie("delivery_food_basket", "", time() - ( 60 * 60 * 24 * 10 ));
             }
         }

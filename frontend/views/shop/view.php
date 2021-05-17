@@ -20,7 +20,9 @@
     <?php  foreach ($products as $key => $value) :  $image= json_decode($value->url_image,true) ?>
       <div class="col-md-3">
         <div class="card h-100">
+          <a href="<?= Url::to(['shop/'. $value->id .'item']) ?>">
             <img src="/<?= $image[0]?>" class="card-img-top" alt="...">
+          </a>
             <div class="card-body">
               <h4 class="card-title text-center" ><?= $value->title?></h4>
               <p class="card-text" style="text-align: justify;"><?= $value->description?></p>  
