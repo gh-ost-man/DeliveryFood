@@ -131,13 +131,10 @@ AppAsset::register($this);
                 </button>
             </div>
         <?php endif?>
-        <?php unset($_SESSION['success'])?>
+        <?php if(isset($_SESSION['success'])) unset($_SESSION['success'])?>
         <?= $content ?>
-
     </div>
 </div>
-
-
 
 <footer class="footer bg-nav">
     <div class="container">

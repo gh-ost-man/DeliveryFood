@@ -20,7 +20,7 @@
                 <h2>Price: <?= $product->price ?> $</h2>
             </div>
             <div class="col-md-6">
-                <a href="<?= Url::to(['basket/'. $product->id .'add-item']) ?>" class="btn btn-success w-100">To basket</a>
+                <a href="<?= Url::to(['basket/'. $product->id .'add-item']) ?>" class="btn btn-success w-100">Add to Cart</a>
             </div>
 
         </div>

@@ -7,14 +7,16 @@ use yii\helpers\Url;
 
 $this->title = 'Delivery Food';
 
+
 $this->registerCss(
-    `
-        .bg-nav
-        {
-            background-color: rgba(34,38,42,255);
-        }
-    `);
+  `
+    .bg-nav
+    {
+        background-color: rgba(34,38,42,255);
+    }
+  `);
 ?>
+
 <div class="container-fluid">
   <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
@@ -47,7 +49,7 @@ $this->registerCss(
           </div>
           <div class="card-footer">
             <h4 class="float-left w-50"><?= $value['price']?>$</h4>
-            <a href="<?= Url::to(['basket/'. $value["id"] .'add-item']) ?>" class="btn btn-success float-right">To basket</a>
+            <a href="<?= Url::to(['basket/'. $value["id"] .'add-item']) ?>" class="btn btn-success float-right">Add to Cart</a>
           </div>
         </div>
       </div>
