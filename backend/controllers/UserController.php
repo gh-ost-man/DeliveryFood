@@ -11,9 +11,8 @@
     use frontend\models\SignupForm;
 
     use common\models\User;
-    
-    use backend\models\Order;
-    use backend\models\Item_Order;
+    use common\models\Order;
+    use common\models\Item_Order;
     use common\models\Product;
    
     class UserController extends Controller

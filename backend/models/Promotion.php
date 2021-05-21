@@ -13,8 +13,8 @@
      * @property string $promotion_url
      * @property int $category_id
      * @property int $product_id
-     * @property DateTime $dtStart
-     * @property DateTime $dtEnd
+     * @property Date $dtStart
+     * @property Date $dtEnd
      */
     class Promotion extends ActiveRecord
     {

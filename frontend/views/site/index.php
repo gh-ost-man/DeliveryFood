@@ -47,7 +47,7 @@ $this->registerCss(
           </div>
           <div class="card-footer">
             <h4 class="float-left w-50"><?= $value['price']?>$</h4>
-            <a href="<?= Url::to(['basket/'. $value["id"] .'add-item']) ?>" class="btn btn-success float-right">Add to Card</a>
+            <a href="<?= Url::to(['basket/'. $value["id"] .'add-item']) ?>" class="btn btn-success float-right">Add to Cart</a>
           </div>
         </div>
       </div>
@@ -55,4 +55,4 @@ $this->registerCss(
   </div>
 </div>
 
-<img src="\images\map.jpg" class="img-fluid w-100"  style="height: 500px;" alt="...">
+<img src="\images\map.jpg" class="img-fluid w-100"  alt="...">

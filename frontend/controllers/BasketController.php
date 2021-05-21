@@ -13,6 +13,7 @@ use common\models\Product;
 use common\models\User;
 use common\models\Order;
 use common\models\Item_Order;
+use backend\models\Promotion;
 
 class BasketController extends Controller {
     
@@ -182,9 +183,13 @@ class BasketController extends Controller {
     
             if($order != null) {
                 $items_order = Item_Order::find()->where(['order_id' => $order->id])->all();
-    
                 if(count($items_order) == 0) return $this->redirect('index');
                 
+                $promotions = Promotion::find()->where(['>' , 'dtEnd', date('Y-m-d')])->all();
+
+                var_dump($promotions);
+                die();
+
                 $total = 0;
     
                 foreach($items_order as $item){
@@ -195,9 +200,9 @@ class BasketController extends Controller {
                 $order->total_price = $total;
                 $order->address = $_POST['address'];
             
-               if($order->save()) {
-                    Yii::$app->session->setFlash('success', "Order removed from database");
-               } 
+                if($order->save()) {
+                    Yii::$app->session->setFlash('success', "Order booked");
+                } 
             }
         } else {
 

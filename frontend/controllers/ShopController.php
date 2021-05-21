@@ -12,6 +12,7 @@
     use common\models\Category;
     use common\models\Product;
     use common\models\User;
+    use backend\models\Promotion;
 
     class ShopController extends Controller
     {
@@ -19,10 +20,12 @@
         {
             $category = Category::find()->where(['id' => $id ])->one();
             $products = Product::find()->where(['category_id' => $id])->all();
-            
+            $promotions = Promotion::find()->where(['category_id' => $id])->one();
+
             return $this->render('view', [
                 'category' => $category,
-                'products' => $products
+                'products' => $products,
+                'promotions' => $promotions
             ]);
         }   
 

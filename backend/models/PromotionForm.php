@@ -20,9 +20,8 @@ class PromotionForm extends Model
     {
         return [
             [['title'], 'string', 'message' => 'Invalid field type'],
-            [['title','promotion_value','type','category_id','promotion_url'], 'required', 'message' => 'The value is required'],
+            [['title','promotion_value','type','dtStart','dtEnd'], 'required', 'message' => 'The value is required'],
             
-            // [['promotion_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
         ];
     }
 

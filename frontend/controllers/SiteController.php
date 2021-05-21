@@ -259,6 +259,16 @@ class SiteController extends Controller
         }
         if ($user = $model->verifyEmail()) {
             if (Yii::$app->user->login($user)) {
+                $auth = Yii::$app->authManager;
+                
+                if(array_keys(Yii::$app->AuthManager->getRolesByUser(Yii::$app->user->id)) != null){
+                    $role_old = array_keys(Yii::$app->AuthManager->getRolesByUser(Yii::$app->user->id))[0];
+                    $role_old = $auth->getRole($role_old);
+
+                    Yii::$app->AuthManager->revoke($role_old, Yii::$app->user->id);
+                } 
+                $role_new = $auth->getRole("user");
+                $auth->assign($role_new, Yii::$app->user->id);
                 Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
                 return $this->goHome();
             }

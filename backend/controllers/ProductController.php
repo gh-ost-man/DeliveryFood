@@ -80,20 +80,28 @@
             $model = new ProductForm;
             $product = Product::findOne(['id' => $id]);
 
+            
             if($model->load(Yii::$app->request->post())){
+                
                 $model->url_image = UploadedFile::getInstances($model, 'url_image');
+
+                if(count($model->url_image) == 0 ){
+                    Yii::$app->session->setFlash('error', 'Select image');
+                    return $this->redirect(['product/index']);
+                }
+
                 $imagePath = $model->upload();
+               
                 if ($imagePath !== false){
                     $product->title = $model->title;
                     $product->description = $model->description;
                     $product->category_id = $model->category_id;
                     $product->price = $model->price;
                     
-                    if($imagePath){
-                        $image = json_decode($product->url_image, true);
-                        $imagePath = array_merge($image, $imagePath);
-                        $product->url_image = json_encode($imagePath);
-                    } 
+                    $image = json_decode($product->url_image, true);
+                    $imagePath = array_merge($image, $imagePath);
+                    $product->url_image = json_encode($imagePath);
+                    
                     if($product->save()){
                         Yii::$app->session->setFlash('success', 'The product is updated in the database');
                     }
