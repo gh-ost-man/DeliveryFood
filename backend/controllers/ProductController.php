@@ -85,10 +85,7 @@
                 
                 $model->url_image = UploadedFile::getInstances($model, 'url_image');
 
-                if(count($model->url_image) == 0 ){
-                    Yii::$app->session->setFlash('error', 'Select image');
-                    return $this->redirect(['product/index']);
-                }
+              
 
                 $imagePath = $model->upload();
                
@@ -101,6 +98,11 @@
                     $image = json_decode($product->url_image, true);
                     $imagePath = array_merge($image, $imagePath);
                     $product->url_image = json_encode($imagePath);
+                    
+                    if( $product->url_image == '[]' ){
+                        Yii::$app->session->setFlash('error', 'Select image');
+                        return $this->redirect(['product/index']);
+                    }
                     
                     if($product->save()){
                         Yii::$app->session->setFlash('success', 'The product is updated in the database');
