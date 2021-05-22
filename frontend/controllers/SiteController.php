@@ -91,7 +91,7 @@ class SiteController extends Controller
     
         for($i = 0; $i< count($items); $i++){
             if($i >= 9 || $i == count($items)) break;
-                array_push($products, $items[$i]);
+            array_push($products, $items[$i]);
         }
 
 
