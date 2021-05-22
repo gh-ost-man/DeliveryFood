@@ -21,7 +21,6 @@ use yii\helpers\Url;
 use common\models\Category;
 use common\models\Product; 
 use common\models\Promotion;
-// use common\models\Tovar;
 
 /**
  * Site controller
@@ -90,10 +89,10 @@ class SiteController extends Controller
         $items = array_reverse($product, true);
         $products = [];
     
-       for($i = 0; $i< count($items); $i++){
-           if($i >= 9 || $i == count($items)) break;
-            array_push($products, $items[$i]);
-       }
+        for($i = 0; $i< count($items); $i++){
+            if($i >= 9 || $i == count($items)) break;
+                array_push($products, $items[$i]);
+        }
 
 
 
