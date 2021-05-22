@@ -79,13 +79,10 @@
         {
             $model = new ProductForm;
             $product = Product::findOne(['id' => $id]);
-
             
             if($model->load(Yii::$app->request->post())){
                 
                 $model->url_image = UploadedFile::getInstances($model, 'url_image');
-
-               
 
                 $imagePath = $model->upload();
                
@@ -99,6 +96,11 @@
                     $imagePath = array_merge($image, $imagePath);
                     $product->url_image = json_encode($imagePath);
 
+                    if( $product->url_image == '[]' ){
+                        Yii::$app->session->setFlash('error', 'Select image');
+                        return $this->redirect(['product/index']);
+                    }
+                    
                     if( $product->url_image == '[]' ){
                         Yii::$app->session->setFlash('error', 'Select image');
                         return $this->redirect(['product/index']);
