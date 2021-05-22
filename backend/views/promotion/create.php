@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'type')->widget(Select2::classname(), [
                     'language' => 'uk-Ua',
                     'data' => $types,
-                    'options' => ['placeholder' => 'Виберіть ...'],
+                    'options' => ['placeholder' => 'Select ...'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'category_id')->widget(Select2::classname(), [
                     'language' => 'uk-Ua',
                     'data' => $categories,
-                    'options' => ['placeholder' => 'Виберіть ...'],
+                    'options' => ['placeholder' => 'Select ...', 'name' => 'category_id' ],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'product_id')->widget(Select2::classname(), [
                     'language' => 'uk-Ua',
                     'data' => $products,
-                    'options' => ['placeholder' => 'Виберіть ...'],
+                    'options' => ['placeholder' => 'Select ...', 'name' => 'product_id'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
