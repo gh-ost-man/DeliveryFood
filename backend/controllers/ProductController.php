@@ -79,13 +79,10 @@
         {
             $model = new ProductForm;
             $product = Product::findOne(['id' => $id]);
-
             
             if($model->load(Yii::$app->request->post())){
                 
                 $model->url_image = UploadedFile::getInstances($model, 'url_image');
-
-              
 
                 $imagePath = $model->upload();
                
