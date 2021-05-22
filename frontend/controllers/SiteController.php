@@ -94,8 +94,6 @@ class SiteController extends Controller
             array_push($products, $items[$i]);
         }
 
-
-
         return $this->render('index',[
             'categories' => Category::find()->all(),
             'products' => $products,

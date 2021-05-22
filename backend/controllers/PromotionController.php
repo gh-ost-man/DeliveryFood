@@ -145,7 +145,14 @@
                         Yii::$app->session->setFlash('error', 'Select image');
                         return $this->redirect(['promotion/'.$id.'update']);
                     }
-                   
+                    if($model->category_id == null && $model->product_id == null || $model->category_id != null && $model->product_id != null) {
+                        Yii::$app->session->setFlash('error', 'select only product or only category');
+                        return $this->redirect(['promotion/'.$id.'update']);
+                    }
+                    if($model->dtStart > $model->dtEnd) {
+                        Yii::$app->session->setFlash('error', 'Incorect date');
+                        return $this->redirect(['promotion/'.$id.'update']);
+                    }
                     if($promotion->save() && $model->promotion_url !== ''){
                         Yii::$app->session->setFlash('success', 'Promotion updated');
                     }

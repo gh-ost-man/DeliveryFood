@@ -12,7 +12,7 @@
     use common\models\Category;
     use common\models\Product;
     use common\models\User;
-    use backend\models\Promotion;
+    use common\models\Promotion;
 
     class ShopController extends Controller
     {

@@ -41,7 +41,7 @@ $i = 1;
             <th scope="col">#</th>
             <th scope="col">Id</th>
             <th scope="col">Title</th>
-            <th scope="col" style="width: 60%;">Description</th>
+            <th scope="col" style="width: 50%;">Description</th>
             <th scope="col"></th>
         </tr>
         </thead>
