@@ -19,8 +19,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 use common\models\Category;
-use common\models\Product;
-// use common\models\Promotion;
+use common\models\Product; 
+use common\models\Promotion;
 // use common\models\Tovar;
 
 /**
@@ -89,7 +89,7 @@ class SiteController extends Controller
 
         $items = array_reverse($product, true);
         $products = [];
-
+    
        for($i = 0; $i< count($items); $i++){
            if($i >= 9 || $i == count($items)) break;
             array_push($products, $items[$i]);
@@ -99,7 +99,8 @@ class SiteController extends Controller
 
         return $this->render('index',[
             'categories' => Category::find()->all(),
-            'products' => $products
+            'products' => $products,
+            'promotion' => Promotion::find()->all()
         ]);
     }
 

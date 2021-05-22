@@ -8,7 +8,7 @@
     use yii\helpers\ArrayHelper;
     use yii\filters\AccessControl;
 
-    use backend\models\Promotion;
+    use common\models\Promotion;
     use backend\models\PromotionForm;
     use common\models\Category;
     use common\models\Product;
