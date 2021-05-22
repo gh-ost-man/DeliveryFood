@@ -55,22 +55,40 @@
         public function actionCreate()
         {
             $model = new PromotionForm;
-
+            $model->dtStart = date('Y-m-d');
+            
             if($model->load(Yii::$app->request->post())){
                 $promotion = new Promotion;
                 $model->promotion_url = UploadedFile::getInstances($model, 'promotion_url');
+
+                if(count($mode->promotion_url) == 0) {
+                    Yii::$app->session->setFlash('error', 'Select image');
+                    return $this->redirect(['promotion/create']);
+                }
+
                 if ($imagePath = $model->upload()){
+
                     $promotion->title = $model->title;
                     $promotion->type = $model->type;
                     $promotion->promotion_value = $model->promotion_value;
-                    $promotion->category_id = $model->category_id;
-                    $promotion->product_id = $model->product_id;
+                    $promotion->category_id = $_POST['category_id'];
+                    $promotion->product_id = $_POST['product_id'];
                     $promotion->dtStart = $model->dtStart;
                     $promotion->dtEnd = $model->dtEnd;
                     $promotion->promotion_url = json_encode($imagePath);
-                    
+
+                    if($model->category_id == null && $model->product_id == null || $model->category_id !== null && $model->product_id !== null) {
+                        Yii::$app->session->setFlash('error', 'Select product or category');
+                        return $this->redirect(['promotion/create']);
+                    }
+                    if($model->dtStart > $model->dtEnd) {
+                        Yii::$app->session->setFlash('error', 'Incorect date');
+                        return $this->redirect(['promotion/create']);
+                    }
+
                     if($promotion->save()){
                         Yii::$app->session->setFlash('success', 'Promotion saved into database');
+                        return $this->redirect(['promotion/index']);
                     }
                    
                 } else {
@@ -110,21 +128,18 @@
                 $model->promotion_url = UploadedFile::getInstances($model, 'promotion_url');
                 $imagePath = $model->upload();
 
-              
                 if ($imagePath !== false){
                     $promotion->title = $model->title;
                     $promotion->type = $model->type;
                     $promotion->promotion_value = $model->promotion_value;
-                    $promotion->category_id = $model->category_id;
-                    $promotion->product_id = $model->product_id;
+                    $promotion->category_id = $_POST['category_id'];
+                    $promotion->product_id = $_POST['product_id'];
                     $promotion->dtStart = $model->dtStart;
                     $promotion->dtEnd = $model->dtEnd;
 
-                    if($imagePath){
-                        $image = json_decode($promotion->promotion_url, true);
-                        $imagePath = array_merge($image, $imagePath);
-                        $promotion->promotion_url = json_encode($imagePath);
-                    } 
+                    $image = json_decode($promotion->promotion_url, true);
+                    $imagePath = array_merge($image, $imagePath);
+                    $promotion->promotion_url = json_encode($imagePath);
 
                     if($promotion->promotion_url == '[]' ) {
                         Yii::$app->session->setFlash('error', 'Select image');
@@ -132,14 +147,13 @@
                     }
                    
                     if($promotion->save() && $model->promotion_url !== ''){
-                        Yii::$app->session->setFlash('success', 'Рекламу оновлено в БД');
+                        Yii::$app->session->setFlash('success', 'Promotion updated');
                     }
                 }  else {
-                    Yii::$app->session->setFlash('error', 'Помилка оновлення реклами в БД');
+                    Yii::$app->session->setFlash('error', 'Error update promotion');
                 }
                 return $this->redirect(['promotion/index']);
             }
-
             
             $model->title = $promotion->title;
             $model->type = $promotion->type;
@@ -153,7 +167,6 @@
             $initialPreview = [];
             $initialConfig = [];
 
-            
             $categories = Category::find()->all();
             foreach($categories as $category){
                 $category_array[$category->id] = $category->title;
@@ -221,7 +234,7 @@
 
                 Yii::$app->session->setFlash('success', "Promotion: < {$promotion->title} > removed from Database");
             } else {
-                Yii::$app->session->setFlash('error', 'Помилка видалення товару з БД');
+                Yii::$app->session->setFlash('error', 'Errpr removing promotion from DB');
             }
 
             return $this->redirect(['promotion/index']);
