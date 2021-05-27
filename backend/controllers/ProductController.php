@@ -33,14 +33,48 @@
 
         public function actionIndex()
         {
+            $nodesOnPage = 10;
+            $page = 1;
+            $start_page = 1;
+            $end_page = 1;
+            $count = count(Product::find()->all());
+
+            $products_all = Product::find()->all();
+
+            $count = count($products_all);
+            $page = (isset($_GET['page']))? $_GET['page'] : 1;
+    
+            $from = ($page - 1) * $nodesOnPage;
+    
+            $products = Product::find()
+            ->offset($from)
+            ->limit($nodesOnPage)
+            ->all();
+
+            if($page >= 10){
+                $start_page = $page - 5;
+                $end_page = (ceil( $count / $nodesOnPage) > $page + $nodesOnPage)? $page + $nodesOnPage: ceil( $count / $nodesOnPage);
+            }else{
+                $start_page = 1;
+                $end_page =(ceil($count / $nodesOnPage) > 10) ? 10 : ceil($count / $nodesOnPage);
+            }
+           
             return $this->render('index',[
-                'products' => Product::find()->all()
+                'products' => $products,
+                'start_page' => $start_page,
+                'end_page' => $end_page,
+                'page' => $page
             ]);
         }
 
         public function actionCreate()
         {
             $model = new ProductForm;
+
+            $categories = Category::find()->all();
+            foreach($categories as $category){
+                $category_array[$category->id] = $category->title;
+            }
 
             if($model->load(Yii::$app->request->post())){
                 $tovar = new Product;
@@ -73,14 +107,18 @@
                     }
                 } else {
                     Yii::$app->session->setFlash('error', 'Error saving product in database');
+                    return $this->render('create', [
+                        'model' => $model,
+                        'categories' => $category_array,
+                        'initialPreview' => [],
+                        'initialConfig' => [],
+                        'product_id' => ''
+                    ]);
                 }
                 return $this->redirect(['product/index']);
             }
 
-            $categories = Category::find()->all();
-            foreach($categories as $category){
-                $category_array[$category->id] = $category->title;
-            }
+          
 
             return $this->render('create', [
                 'model' => $model,

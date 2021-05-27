@@ -88,12 +88,13 @@ class SiteController extends Controller
 
         $items = array_reverse($product, true);
         $products = [];
-    
-        for($i = 0; $i< count($items); $i++){
+        $i = 0;
+        foreach($items as $item) {
+            $i++;
             if($i >= 9 || $i == count($items)) break;
-            array_push($products, $items[$i]);
+            array_push($products, $item);
         }
-
+      
         return $this->render('index',[
             'categories' => Category::find()->all(),
             'products' => $products,

@@ -34,7 +34,7 @@ phpunit.phar
 # vagrant runtime
 /.vagrant
 
-/images
+
 
 # ignore generated files
 # /frontend/web/index.php
@@ -43,3 +43,4 @@ phpunit.phar
 # /backend/web/index.php
 # /backend/web/index-test.php
 # /backend/web/robots.txt
+/images

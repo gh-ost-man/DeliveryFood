@@ -18,7 +18,7 @@ class ProductForm extends Model
             [['title', 'description'], 'string', 'message' => 'Invalid field type'],
             [['category_id'], 'integer', 'min' => 0],
             [['price'], 'double', 'min' => 0],
-            [['title', 'description', 'category_id', 'price'], 'required', 'message' => 'The value is required'],
+            [['title', 'category_id', 'price'], 'required', 'message' => 'The value is required'],
             // [['url_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
         ]; 
     }

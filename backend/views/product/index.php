@@ -3,6 +3,8 @@
     use yii\helpers\Url;
     use yii\grid\GridView;
 
+    use common\models\Product;
+
     $this->title = 'Products';
     $this->params['breadcrumbs'][] = $this->title;
 
@@ -18,6 +20,35 @@
 
     $i = 1;
 
+    // //Pagination
+    // $nodesOnPage = 10;
+    // $page = 1;
+    // $start_page=1;
+    // $end_page=1;
+    // $count = count(Product::find()->all());
+
+    // if($_SERVER['REQUEST_METHOD'] == 'GET'){
+    //     $products_all = Product::find()->all();
+
+    //     $count = count($products_all);
+    //     $page = (isset($_GET['page']))? $_GET['page'] : 1;
+
+    //     $from = ($page - 1) * $nodesOnPage;
+
+    //     $products = Product::find()
+    //     ->offset($from)
+    //     ->limit($nodesOnPage)
+    //     ->all();
+
+    // }
+
+    // if($page >= 10){
+    //     $start_page = $page - 5;
+    //     $end_page = (ceil( $count / $nodesOnPage) > $page + $nodesOnPage)? $page + $nodesOnPage: ceil( $count / $nodesOnPage);
+    // }else{
+    //     $start_page = 1;
+    //     $end_page =(ceil($count / $nodesOnPage) > 10) ? 10 : ceil($count / $nodesOnPage);
+    // }
 ?>
 
 <div class="panel panel-default">
@@ -63,15 +94,19 @@
     </table>
 
 </div>
-<nav aria-label="Navigation">
-    <ul class="pagination justify-content-center">
-        <?php
-            foreach(range($start_page,$end_page) as $i):
-                if($i == $page){ ?>
-        <li class="page-item active"><a class="page-link" href="index.php?page=<?=$i . $url_filter_by_letter . $url_filter_by_state . $url_sort?>"><?=$i?></a> </li>
-        <?php } else{ ?>
-            <li class="page-item "><a class="page-link" href="index.php?page=<?=$i . $url_filter_by_letter . $url_filter_by_state . $url_sort?>"><?=$i?></a> </li>
-        <?php } endforeach?>
 
-    </ul>
-</nav>
+<?php if(count($products) != 0) :?>
+    <div class="d-flex align-items-center">
+        <ul class="pagination">
+            <?php foreach(range($start_page,$end_page) as $p) :   if($p == $page) { ?>
+                <li class="page-item active">
+                    <?=  Html::a($p, ['index','page' => $p], ['class' => 'page-link']);  ?>
+                </li>
+            <?php } else { ?>
+                <li class="page-item">
+                    <?=  Html::a($p, ['index','page' => $p], ['class' => 'page-link']);  ?>
+                </li>
+            <?php } endforeach?>
+        </ul>
+    </div>
+<?php endif?>
