@@ -24,5 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <p style="font-size: 15px;"><?= $product->description?></p>
         <h3>Price: <?= $product->price ?></h3>
         <h3>Category: <?= $category->title?></h3>
+        <?php if($product->discount) :?>
+        <h3>Discount: <?= $product->discount?> $</h3>
+        <?php endif ?>
+
     </div>
 </div>

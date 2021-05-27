@@ -58,35 +58,38 @@
 <hr>
 
 <div class="row">
-    <?php  foreach ($products as $key => $value) :  $image= json_decode($value->url_image,true) ?>
-      <div class="col-md-3 mt-4">
-        <div class="card h-100">
-          <?php if($promotions) : ?>
-            <div class="corner-text-wrapper">
-                <div class="corner-text">
-                  <?php if ($promotions->type == 'n+1') : ?>
-                    <span style="font-size:18px"><?= ($promotions->type == 'n+1')? $promotions->promotion_value .' + ' . 1:''?></span>
-                  <?php endif ?>
-                  <?php if ($promotions->type == 'discount' && $promotions->product_id == $value->id) : ?>
-                    <span style="font-size:18px">- <?= $promotions->promotion_value ?></span>
-                  <?php endif ?>
-                </div>
-            </div>
-          <?php endif ?>
-            <a href="<?= Url::to(['shop/'. $value->id .'item']) ?>">
-              <img src="/<?= $image[0]?>" class="card-img-top" alt="...">
-            </a>
-            <div class="card-body">
-              <h4 class="card-title text-center" ><?= $value->title?></h4>
-              <p class="card-text" style="text-align: justify;"><?= $value->description?></p>  
-            </div>
-            <div class="card-footer">
-                <h4 class="float-left "><?= $value->price?>$</h4>
-                <!-- <h4 class="float-left ml-1"><?= $value->price?>$</h4> -->
-                <a href="<?= Url::to(['basket/'. $value->id .'add-item']) ?>" class="btn btn-success float-right">Add to Card</a>
+  <?php  foreach ($products as $key => $value) :  $image= json_decode($value->url_image,true) ?>
+    <div class="col-md-4 mt-4">
+      <div class="card h-100">
+        <?php if($promotions) : ?>
+          <div class="corner-text-wrapper">
+            <div class="corner-text">
+              <span style="font-size:18px"><?= $promotions->promotion_value . ' + ' . 1 ?></span>
             </div>
           </div>
+        <?php endif ?>
+        <?php if($value->discount) : ?>
+          <div class="corner-text-wrapper">
+            <div class="corner-text">
+              <span style="font-size:18px">- <?= $value->discount ?> $</span>
+            </div>
+          </div>
+        <?php endif ?>
+        <a href="<?= Url::to(['shop/'. $value->id .'item']) ?>">
+          <img src="/<?= $image[0]?>" class="card-img-top" alt="...">
+        </a>
+        <div class="card-body">
+          <h4 class="card-title text-center" ><?= $value->title?></h4>
+          <p class="card-text" style="text-align: justify;"><?= $value->description?></p>  
+        </div>
+        <div class="card-footer">
+            <?php if($value->discount): ?>
+              <h5 class="float-left mr-2 text-danger" style="text-decoration: line-through;"><?= $value->price?>$</h5>
+            <?php endif ?>
+            <h5 class="float-left "><?= ($value->discount)? $value->price - $value->discount : $value->price?>$</h5>
+            <a href="<?= Url::to(['basket/'. $value->id .'add-item']) ?>" class="btn btn-success float-right">Add to Card</a>
+        </div>
       </div>
-    <?php  endforeach  ?>
-    
+    </div>
+  <?php  endforeach  ?>
 </div>

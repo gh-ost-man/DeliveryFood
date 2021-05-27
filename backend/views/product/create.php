@@ -48,6 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]); ?>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <?= $form->field($model, 'discount')->textInput(['type' => 'number', 'min' => 0, 'step' => '1', 'name' => 'discount']); ?>
+            </div>
+        </div>
        
         <div class="row">
             <div class="col-md-12">

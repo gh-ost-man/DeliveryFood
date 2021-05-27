@@ -27,18 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="row">
             <div class="col-md-12">
-                <?= $form->field($model, 'type')->widget(Select2::classname(), [
-                    'language' => 'uk-Ua',
-                    'data' => $types,
-                    'options' => ['placeholder' => 'Select ...'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]); ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
                 <?= $form->field($model, 'promotion_value')->textInput(['type' => 'number', 'min' => 0, 'max' => 100, 'step' => '1']); ?>
             </div>
         </div>
@@ -56,19 +44,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         
-        <div class="row">
-            <div class="col-md-12">
-                <?= $form->field($model, 'product_id')->widget(Select2::classname(), [
-                    'language' => 'uk-Ua',
-                    'data' => $products,
-                    'options' => ['placeholder' => 'Select ...', 'name' => 'product_id'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]); ?>
-            </div>
-        </div>
-       
         <div class="row">
             <div class="col-md-12">
                 <?= $form->field($model, 'dtStart')->textInput(['type' => 'date']); ?>

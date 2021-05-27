@@ -65,7 +65,7 @@ $j = 1;
         <tr>
             <th scope="row"><?= $j++; ?></th>
             <th scope="row"><?= $item['id']; ?></th>
-            <td><?= $item['product'] ?></td>
+            <td><?= $item['product'] ?> (<?= $item['product_price']?>$)</td>
             <td><?= $item['count'] ?></td>
             <td><?= $item['price'] ?></td>
         </tr>

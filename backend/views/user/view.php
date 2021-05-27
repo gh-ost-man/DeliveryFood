@@ -27,9 +27,10 @@
             });
         });
     JS;
+  
+    $this->registerJS($js);
 
     $i = 1;
-    $this->registerJS($js);
 ?>
 
 <div class="panel panel-default">

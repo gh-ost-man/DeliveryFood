@@ -50,7 +50,13 @@
         }
         public function actionOrder($id)
         {
+
             $order = Order::find()->where(['id' => $id])->one();
+ 
+            if(!$order) {
+                return $this->redirect('index');
+            }
+            
             $items_order = Item_Order::findAll(['order_id' => $id]);
             $user = User::find()->where(['id' => $order->user_id])->one();
             $guest = $order->guest;
@@ -63,6 +69,7 @@
                 $items[] =[
                     'id' => $item->id,
                     'product' => $product->title,
+                    'product_price' => $product->price,
                     'price' => $item->price,
                     'count' => $item->count
                 ];

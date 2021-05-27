@@ -21,7 +21,7 @@
 <hr>
 <form id="pay-order">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-12">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input type="email" class="form-control" value="<?= isset($user->email)? $user->email : ''?>" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required>
@@ -31,8 +31,8 @@
                 <input type="text" class="form-control" name="address" required>
             </div>
         </div>
-        <div class="col-md-8">
-            <table class="table">
+        <div class="col-md-12">
+            <table class="table" id="basket">
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">#</th>
@@ -40,6 +40,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Count</th>
                         <th scope="col">Price</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,13 +56,16 @@
                         </td>
                         <td><?= $product['title'] ?></td>
                         <td>
-                            <input type="number" name="<?= isset($order->id)? $order->id: 'guest' ?>" id="<?= $product['id'] ?>" class="product-count" value="<?= $product['count'] ?>" min="1">
+                            <input style="width:40%" type="number" name="<?= isset($order->id)? $order->id: 'guest' ?>" id="<?= $product['id'] ?>" class="product-count" value="<?= $product['count'] ?>" min="1">
                         <td class="price-<?= $product['id']?>"><?= $product['price'] ?> $</td>
+                        <td><a id="<?= $product['id'] ?>" class="item">Delete</a></td>
                     </tr>
+                    <input  class="invisible" id="product-<?=$product['id']?>" value="<?= $product['discount']?>">
                 <?php endforeach?>
                 </tbody>
             </table>
-            <h1 style="font-size:30px">Total price: <span id="total"></span> $</h1>
+            <h5 id="discount" class="<?= ($discount_sum>0)? 'd-block': 'd-none'?>">Discount: -<span id="discount_value"><?= ($discount_sum != '' && $discount_sum>0)? $discount_sum: ''?></span> $</h5>
+            <h1 style="font-size:30px">Total price: <span id="total"><?= $total_sum?></span> $</h1>
             <button type="submit" class="btn btn-success">Submit</button>
             <a href="<?= Url::to(['/basket/cancel-order']) ?>" class='btn btn-danger'>Cancel order</a>
         </div>
@@ -72,8 +76,9 @@
 
   let host = window.location.protocol + "//" + window.location.host;
   
-  Total();
-
+//   Total();
+  
+ 
   $('.product-count').change(function(){
     let id = $(this).attr('id');
     let count = $(this).val();
@@ -88,27 +93,58 @@
         'order_id' : order_id,
         'count' : count
       },
-      success: function(data){}
+      success: function(data){
+          console.log(data);
+        if(data.discount == 0) {
+            $('#discount').addClass('d-none');
+            $('#discount').removeClass('d-block');
+            
+        } else {
+            $('#discount').addClass('d-block');
+            $('#discount').removeClass('d-none');
+        }
+        $('#discount_value').html(data.discount);
+        $('#total').html(data.total);
+      }
     });
 
-    Total();
+    // Total();
   });
 
-  function Total(){
-    let total = 0;
-    $('.product-count').each(function(){
-        let id = $(this).attr('id');
-        let count = $(this).val();
-        let price = parseInt($('.price-' + id).html());
-        let m = count * price;
+//   function Total(){
+//     let total = 0;
+//     let sum_dis = 0;
+//     $('.product-count').each(function(){
+//         let id = $(this).attr('id');
+//         let count = $(this).val();
+//         let price = parseInt($('.price-' + id).html());
+//         let discount =  $('#product-'+ id).val();
+//         let sum = 0;
+        
+//         if(discount == '') {
+//             sum = price * count ;
+//             $('#discount').removeClass('d-none');
+//         } else {
+//             sum = (price - discount) * count ;
+//             sum_dis += parseInt(discount) * count;
 
-        console.log(`id =  ${id}\nCount = ${count}\nPrice = ${price}\nTotal = ${m}`);
+//             if(!$('#discount').hasClass('d-block')) {
+//                 $('#discount').addClass('d-block');
+//             }
+//         }
 
-        total += m;
-    });
+//         if(sum_dis > 0) {
+//             $('#discount_value').html(sum_dis);
+//         } else {
+//             sum_dis = 0;
+//         }
+//         console.log(`id =  ${id}\nCount = ${count}\nPrice = ${price}\nDiscount = ${discount}\nTotal = ${sum}`);
+
+//         total += sum;
+//     });
     
-    $('#total').html(total);
-  }
+//     $('#total').html(total);
+//   }
 
 </script>
 
@@ -127,4 +163,41 @@
             },
         });
     });
+</script>
+
+<script>
+
+    $('.item').click(function(){
+       let index = this.parentNode.parentNode.rowIndex;
+        
+        var id = $(this).attr('id');
+        $.ajax({
+            type: 'post',
+            url: 'delete-item',
+            data: { 'id' : id, },
+            success: (function(data) {
+                document.getElementById("basket").deleteRow(index);
+                console.log(data);
+                if(data == 1) {
+                    $('#discount_value').html(0);
+                    $('#total').html(0);
+                    $('#discount').addClass('d-none');
+                    $('#discount').removeClass('d-block');
+                } else {
+                    if(data.discount == 0) {
+                        $('#discount').addClass('d-none');
+                        $('#discount').removeClass('d-block');
+                
+                    } else {
+                        $('#discount').addClass('d-block');
+                        $('#discount').removeClass('d-none');
+                    }
+                    $('#discount_value').html(data.discount);
+                    $('#total').html(data.total);
+                }
+            })
+
+        });
+    });
+
 </script>

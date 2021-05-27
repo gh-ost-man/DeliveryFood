@@ -13,45 +13,114 @@ use common\models\Product;
 use common\models\User;
 use common\models\Order;
 use common\models\Item_Order;
-use backend\models\Promotion;
+use common\models\Promotion;
 
 class BasketController extends Controller {
     
+
+    private function getTotalPrice($id) {
+        $discount = 0;
+        $total = 0;
+        $cart = [];
+        $promotion = Promotion::find()
+        ->where(['>' , 'dtEnd', date('Y-m-d')])
+        ->andWhere(['<=', 'dtStart', date('Y-m-d'),])
+        ->one();
+
+        $items_order = Item_Order::find()->where(['order_id' => $id])->all();
+        
+        if($promotion != null) {
+            foreach($items_order as $item) {
+                for($i = 0; $i < $item->count; $i++) {
+                    $cart[] = $item->product_id;
+                }
+            }
+
+            $i = 0;
+            $tovars= [];
+            foreach($cart as $id) {
+                $tovar = Product::find()->where(['id' => $id])->one();
+
+                if($tovar->category_id == $promotion->category_id) {
+                    $i++;
+                    if($i == ($promotion->promotion_value + 1)) {
+                        $i = 0;
+                        $discount += $tovar->price;
+                    } else {
+                        $tovars[] = $tovar;
+                    }
+                } else {
+                    $tovars[] = $tovar;
+                }
+            }
+
+            foreach($tovars as $item){
+                if($item['discount'] != null) {
+                    $total += $item['price'] - $item['discount'];
+                    $discount += $item['discount'];
+                } else {
+                    $total += $item['price'];
+                }
+            }
+
+        } else {
+            foreach($items_order as $item) {
+                $total += $item->price;
+            }
+        }
+
+
+        return ['total' => $total, 'discount' => $discount];
+    }
+
     public function actionIndex()
     {
         $idUser = Yii::$app->user->id;
 
+        $promotions = Promotion::find()->where(['>' , 'dtEnd', date('Y-m-d')])->andWhere(['!=','category_id', 'NULL'])->one();
         if($idUser) {
+            
             $order = Order::find()->where(['user_id' => $idUser])->andWhere(['=','status','new'])->one();
-    
+            $total = 0;
+            $discount = 0;
+            $cart = [];
+           
             if($order != null) {
                 $items_order = Item_Order::find()->where(['order_id' => $order->id])->all();
                 $products = [];
-    
+
+                $total = $this->getTotalPrice($order->id)['total'];
+                $discount = $this->getTotalPrice($order->id)['discount'];
+
                 foreach($items_order as $item) {
                     $product = Product::find()->where(['id' => $item->product_id])->one();
-    
+                  
                     $products[] = [
                         'id' => $product->id,
                         'title' => $product->title,
                         'price' => $product-> price,
                         'url_image' => json_decode($product->url_image, true),
                         'count' => $item->count,
+                        'discount' => $product->discount
                     ];
                 } 
+
                 return $this->render('index', [
                     'order' => $order,
                     'products' => $products,
-                    'user' => User::find()->where(['id' => $idUser])->one()
-
+                    'user' => User::find()->where(['id' => $idUser])->one(),
+                    'total_sum' => $total,
+                    'discount_sum' => $discount
                 ]);
             }
         } else {
             if(isset($_COOKIE['delivery_food_basket'])){
                 $info = unserialize($_COOKIE['delivery_food_basket'], ["allowed_classes" => false]);
 
+                
                 foreach($info as $item){
                     $product = Product::find()->where(['id' => $item['product_id']])->one();
+
                     $products[] = [
                         'id' => $product->id,
                         'title' => $product->title,
@@ -64,8 +133,7 @@ class BasketController extends Controller {
                 return $this->render('index', [
                     'order' => [],
                     'products' => $products,
-                    'user' => User::find()->where(['id' => $idUser])->one()
-    
+                    'user' => User::find()->where(['id' => $idUser])->one(),
                 ]);
             }
         }
@@ -73,8 +141,9 @@ class BasketController extends Controller {
         return $this->render('index', [
             'order' => [],
             'products' => [],
-            'user' => [],
-            'user' => User::find()->where(['id' => $idUser])->one()
+            'user' => User::find()->where(['id' => $idUser])->one(),
+            "total_sum" => 0,
+            'discount_sum' => 0
         ]);
     }
     public function actionAddItem($id)
@@ -155,6 +224,11 @@ class BasketController extends Controller {
                 $item_order->count = $_POST['count'];
                 $item_order->price = $product->price * $item_order->count;
                 $item_order->save();
+
+                $total = $this->getTotalPrice($_POST['order_id'])['total'];
+                $discount = $this->getTotalPrice($_POST['order_id'])['discount'];
+
+                return ["total" => $total, 'discount' => $discount ];
                 
             } else {
                 $info = unserialize($_COOKIE['delivery_food_basket'], ["allowed_classes" => false]);
@@ -183,19 +257,59 @@ class BasketController extends Controller {
     
             if($order != null) {
                 $items_order = Item_Order::find()->where(['order_id' => $order->id])->all();
+                $total = 0;
+                $cart = []; 
+
+
                 if(count($items_order) == 0) return $this->redirect('index');
                 
-                $promotions = Promotion::find()->where(['>' , 'dtEnd', date('Y-m-d')])->all();
+                //Шукаєм діючу рукламу
+                $promotion = Promotion::find()
+                ->where(['>' , 'dtEnd', date('Y-m-d')])
+                ->andWhere(['<=', 'dtStart', date('Y-m-d'),])
+                ->one();
 
-                var_dump($promotions);
-                die();
-
-                $total = 0;
+                if($promotion != null) {
+                    //вибираєм всі продукти з замовлення
+                    foreach($items_order as $item) {
+                        for($i = 0; $i < $item->count; $i++) {
+                            $cart[] = $item->product_id;
+                        }
+                    }
     
-                foreach($items_order as $item){
-                    $total += $item->price;
+                    $i = 0;
+                    $products= [];
+                    foreach($cart as $id) {
+                        $product = Product::find()->where(['id' => $id])->one();
+    
+                        if($product->category_id == $promotion->category_id) {
+                            $i++;
+                            if($i == ($promotion->promotion_value + 1)) {
+                                $i = 0;
+                            } else {
+                                $products[] = $product;
+                            }
+                        } else {
+                            $products[] = $product;
+                        }
+                    }
+        
+                    foreach($products as $item){
+                        if($item['discount'] != null) {
+                            $total += $item['price'] - $item['discount'];
+                        } else {
+                            $total += $item['price'];
+                        }
+                    }
+
+                    var_dump($total);
+                } else {
+                    foreach($items_order as $item) {
+                        $total += $item->price;
+                    }
                 }
-    
+
+
                 $order->status = 'booked';
                 $order->total_price = $total;
                 $order->address = $_POST['address'];
@@ -262,5 +376,47 @@ class BasketController extends Controller {
         }
 
         return $this->redirect('index');
+    }
+
+    public function actionDeleteItem()
+    {
+        if ($_POST['id'] != '') {
+            if(Yii::$app->user->id) {
+                $order = Order::find()->where(['user_id' => Yii::$app->user->id])->andWhere(['=','status','new'])->one();
+
+                $item_order = Item_Order::find()
+                ->where(['order_id' => $order->id])
+                ->andWhere(['product_id' => $_POST['id']])->one()
+                ->delete();
+
+                $total = $this->getTotalPrice($_POST['id'])['total'];
+                $discount = $this->getTotalPrice($_POST['id'])['discount'];
+
+                if(count(Item_Order::find()->where(['order_id' => $order])->all()) == 0) {
+                    $order->delete();
+                    return true;
+                }
+
+                // return ['total' => $total, 'discount' => $discount];
+
+            } else {
+                if(isset($_COOKIE['delivery_food_basket'])) {
+                    $info = unserialize($_COOKIE['delivery_food_basket'], ["allowed_classes" => false]);
+
+                    for($i = 0; $i<count($info); $i++) {
+                        if($info[$i]['product_id'] == $_POST['id']) {
+                            array_splice($info, $i, 1);
+                            break;
+                        }
+                    }
+                    if(count($info) == 0) {
+                        setcookie("delivery_food_basket", "", time() - ( 60 * 60 * 24 * 10 ));
+                    } else {
+                        setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 )); //  time() +(60*60*24*10)) -> 10 days
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

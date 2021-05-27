@@ -52,9 +52,9 @@
                 {
                     Yii::$app->session->setFlash('success', 'Category saved into DB');
                 }
-                else{
+                else { 
                     Yii::$app->session->setFlash('error', 'Error! Category NOT saved into DB ');
-                    }
+                }
                 
                 return  $this->redirect(['category/index']);
                     
@@ -78,13 +78,13 @@
 
                 if($category->save())
                 {
-                Yii::$app->session->setFlash('success', 'Товар збережено в БД ');
+                    Yii::$app->session->setFlash('success', 'Товар збережено в БД ');
                 }
                 else{
                     Yii::$app->session->setFlash('error', 'Помилка НЕ збережено в БД ');
                 }
             
-            return  $this->redirect(['category/index']);
+                return  $this->redirect(['category/index']);
             
             }
 
@@ -104,13 +104,13 @@
             $model = new CategoryForm; 
             $category = Category::findOne(['id' => $id]);
         
-            if($category -> delete())
-                {
+            if($category->delete())
+            {
                 Yii::$app->session->setFlash('success', 'Category deleted from DB ');
-                }
-                else{
-                    Yii::$app->session->setFlash('error', 'Error! Category NOT deleted from DB');
-                }
+            }
+            else{
+                Yii::$app->session->setFlash('error', 'Error! Category NOT deleted from DB');
+            }
             
             return  $this->redirect(['category/index']);
         }

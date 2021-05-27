@@ -60,27 +60,35 @@
             if($model->load(Yii::$app->request->post())){
                 $promotion = new Promotion;
                 $model->promotion_url = UploadedFile::getInstances($model, 'promotion_url');
-
-                if(count($mode->promotion_url) == 0) {
+                $model->category_id = $_POST['category_id'];
+                if(count($model->promotion_url) == 0) {
                     Yii::$app->session->setFlash('error', 'Select image');
                     return $this->redirect(['promotion/create']);
                 }
 
+             
                 if ($imagePath = $model->upload()){
 
                     $promotion->title = $model->title;
-                    $promotion->type = $model->type;
                     $promotion->promotion_value = $model->promotion_value;
                     $promotion->category_id = $_POST['category_id'];
-                    $promotion->product_id = $_POST['product_id'];
                     $promotion->dtStart = $model->dtStart;
                     $promotion->dtEnd = $model->dtEnd;
                     $promotion->promotion_url = json_encode($imagePath);
 
-                    if($model->category_id == null && $model->product_id == null || $model->category_id !== null && $model->product_id !== null) {
-                        Yii::$app->session->setFlash('error', 'Select product or category');
-                        return $this->redirect(['promotion/create']);
+
+                    if( $promotion->category_id != null) {
+                        $promo = Promotion::find()
+                        ->where(['>' ,'dtEnd', $promotion->dtStart])
+                        ->andWhere(['!=','category_id',  "NULL"])
+                        ->one();
+                        
+                        if($promo != null) {
+                            Yii::$app->session->setFlash('error', 'Error');
+                            return $this->redirect(['promotion/create']);
+                        }
                     }
+
                     if($model->dtStart > $model->dtEnd) {
                         Yii::$app->session->setFlash('error', 'Incorect date');
                         return $this->redirect(['promotion/create']);
@@ -88,6 +96,18 @@
 
                     if($promotion->save()){
                         Yii::$app->session->setFlash('success', 'Promotion saved into database');
+
+                        $tovars = Product::find()->where(['category_id' => $promotion->category_id])
+                        ->andWhere(['!=','discount' ,"NULL"])->all();
+
+                        if(count($tovars) != 0) {
+                            foreach($tovars as $tovar) {
+                                $tovar->discount = null;
+                                $tovar->save();
+                            }
+                        }
+
+
                         return $this->redirect(['promotion/index']);
                     }
                    
@@ -110,7 +130,6 @@
 
             return $this->render('create', [
                 'model' => $model,
-                'types' => PromotionForm::getTypes(),
                 'categories' => $category_array,
                 'products' => $product_array,
                 'initialPreview' => [],
@@ -130,10 +149,8 @@
 
                 if ($imagePath !== false){
                     $promotion->title = $model->title;
-                    $promotion->type = $model->type;
                     $promotion->promotion_value = $model->promotion_value;
                     $promotion->category_id = $_POST['category_id'];
-                    $promotion->product_id = $_POST['product_id'];
                     $promotion->dtStart = $model->dtStart;
                     $promotion->dtEnd = $model->dtEnd;
 
@@ -141,14 +158,13 @@
                     $imagePath = array_merge($image, $imagePath);
                     $promotion->promotion_url = json_encode($imagePath);
 
+
                     if($promotion->promotion_url == '[]' ) {
                         Yii::$app->session->setFlash('error', 'Select image');
                         return $this->redirect(['promotion/'.$id.'update']);
                     }
-                    if($model->category_id == null && $model->product_id == null || $model->category_id != null && $model->product_id != null) {
-                        Yii::$app->session->setFlash('error', 'select only product or only category');
-                        return $this->redirect(['promotion/'.$id.'update']);
-                    }
+                  
+
                     if($model->dtStart > $model->dtEnd) {
                         Yii::$app->session->setFlash('error', 'Incorect date');
                         return $this->redirect(['promotion/'.$id.'update']);
@@ -163,10 +179,8 @@
             }
             
             $model->title = $promotion->title;
-            $model->type = $promotion->type;
             $model->promotion_value = $promotion->promotion_value;
             $model->category_id = $promotion->category_id;
-            $model->product_id = $promotion->product_id;
             $model->dtStart = $promotion->dtStart;
             $model->dtEnd = $promotion->dtEnd;
             $images = json_decode($promotion->promotion_url, true);
@@ -194,7 +208,6 @@
         
             return $this->render('create', [
                 'model' => $model,
-                'types' => PromotionForm::getTypes(),
                 'categories' => $category_array,
                 'products' => $product_array,
                 'initialPreview' => $initialPreview,

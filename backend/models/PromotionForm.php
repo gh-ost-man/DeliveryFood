@@ -6,21 +6,17 @@ use yii\base\Model;
 class PromotionForm extends Model
 {
     public $title;
-    public $type;
     public $promotion_value;
     public $promotion_url;
     public $category_id;
-    public $product_id;
     public $dtStart;
     public $dtEnd;
-
-    const TYPES = ['n+1' => 'n+1','discount' => 'discount'];
 
     public function rules()
     {
         return [
             [['title'], 'string', 'message' => 'Invalid field type'],
-            [['title','promotion_value','type','dtStart','dtEnd'], 'required', 'message' => 'The value is required'],
+            [['title','promotion_value','category_id','dtStart','dtEnd'], 'required', 'message' => 'The value is required'],
             
         ];
     }
@@ -29,10 +25,8 @@ class PromotionForm extends Model
     {
         return [
             'title' => 'Title',
-            'type' => 'Type',
             'promotion_value' => 'Value',
             'category_id' => 'Category',
-            'product_id' => 'Product',
             'dtStart' => 'Start date',
             'dtEnd' => 'End date'
         ];
@@ -51,10 +45,5 @@ class PromotionForm extends Model
             return $result;
         }
         return false;
-    }
-
-    static function  getTypes()
-    {
-        return self::TYPES;
     }
 }

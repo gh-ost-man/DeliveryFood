@@ -1,22 +1,22 @@
 <?php
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\GridView;
+    use yii\helpers\Html;
+    use yii\helpers\Url;
+    use yii\grid\GridView;
 
-$this->title = 'Products';
-$this->params['breadcrumbs'][] = $this->title;
+    $this->title = 'Products';
+    $this->params['breadcrumbs'][] = $this->title;
 
-$this->registerCss(
-"
-    .btn-update 
-    {
-        background-color: rgba(255,193,7,255);
-        color: black;
-    }
-"
-);
+    $this->registerCss(
+    "
+        .btn-update 
+        {
+            background-color: rgba(255,193,7,255);
+            color: black;
+        }
+    "
+    );
 
-$i = 1;
+    $i = 1;
 
 ?>
 
@@ -61,4 +61,17 @@ $i = 1;
         <?php endforeach ?>
         </tbody>
     </table>
+
 </div>
+<nav aria-label="Navigation">
+    <ul class="pagination justify-content-center">
+        <?php
+            foreach(range($start_page,$end_page) as $i):
+                if($i == $page){ ?>
+        <li class="page-item active"><a class="page-link" href="index.php?page=<?=$i . $url_filter_by_letter . $url_filter_by_state . $url_sort?>"><?=$i?></a> </li>
+        <?php } else{ ?>
+            <li class="page-item "><a class="page-link" href="index.php?page=<?=$i . $url_filter_by_letter . $url_filter_by_state . $url_sort?>"><?=$i?></a> </li>
+        <?php } endforeach?>
+
+    </ul>
+</nav>

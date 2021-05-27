@@ -97,7 +97,10 @@ class SiteController extends Controller
         return $this->render('index',[
             'categories' => Category::find()->all(),
             'products' => $products,
-            'promotion' => Promotion::find()->all()
+            'promotion' =>  Promotion::find()
+            ->where(['>' , 'dtEnd', date('Y-m-d')])
+            ->andWhere(['<=', 'dtStart', date('Y-m-d'),])
+            ->one()
         ]);
     }
 

@@ -12,6 +12,8 @@
      * @property string $url_image
      * @property float $price
      * @property int $category_id
+     * @property int $discount
+     * 
      */
     class Product extends ActiveRecord
     {

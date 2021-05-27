@@ -10,6 +10,7 @@ class ProductForm extends Model
     public $url_image;
     public $category_id;
     public $price;
+    public $discount;
     
     public function rules()
     {
@@ -29,7 +30,8 @@ class ProductForm extends Model
             'description' => 'Description',
             'category_id' => 'Category',
             'price' => 'Price',
-            'url_image' => 'Image' 
+            'url_image' => 'Image',
+            'discount' => 'Discount'
         ];
     }
     public function upload()

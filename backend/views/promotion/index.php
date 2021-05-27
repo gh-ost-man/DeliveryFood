@@ -41,7 +41,6 @@ $i = 1;
         <th scope="col">#</th>
         <th scope="col">Id</th>
         <th scope="col" style="max-width:50%;">Title</th>
-        <th scope="col">Type</th>
         <th scope="col">Value</th>
         <th scope="col"></th>
         <th scope="col"></th>
@@ -53,7 +52,6 @@ $i = 1;
               <th scope="row"><?= $i++; ?></th>
               <th scope="row"><?= $promo['id']; ?></th>
               <th scope="row"><?= $promo['title']; ?></th>
-              <th scope="row"><?= $promo['type']; ?></th>
               <th scope="row"><?= $promo['promotion_value']; ?></th>
               <td> 
                     <?=  Html::a('View', ['view','id' => $promo['id']], ['class' => 'btn btn-info']);  ?>

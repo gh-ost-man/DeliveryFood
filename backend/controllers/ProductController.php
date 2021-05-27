@@ -10,6 +10,7 @@
 
     use common\models\Category;
     use common\models\Product;
+    use common\models\Promotion;
     use backend\models\ProductForm;
    
     class ProductController extends Controller
@@ -50,8 +51,23 @@
                     $tovar->description = $model->description;
                     $tovar->category_id = $model->category_id;
                     $tovar->price = $model->price;
+                    $tovar->discount = $_POST['discount'];
                     $tovar->url_image = json_encode($imagePath);
                     
+
+
+                    if($tovar->discount != null) {
+                        $promo = Promotion::find()
+                        ->where(['>' ,'dtEnd', date('Y-m-d')])
+                        ->andWhere(['=','category_id',  $tovar->category_id])
+                        ->one();
+
+                        if($promo != null) {
+                            Yii::$app->session->setFlash('error', 'Сannot add a discount');
+                            return $this->redirect(['product/create']);
+                        }
+                    }
+
                     if($tovar->save()){
                         Yii::$app->session->setFlash('success', 'The product saved into Database');
                     }
@@ -91,7 +107,8 @@
                     $product->description = $model->description;
                     $product->category_id = $model->category_id;
                     $product->price = $model->price;
-                    
+                    $product->discount = $_POST['discount'];
+
                     $image = json_decode($product->url_image, true);
                     $imagePath = array_merge($image, $imagePath);
                     $product->url_image = json_encode($imagePath);
@@ -101,9 +118,16 @@
                         return $this->redirect(['product/index']);
                     }
                     
-                    if( $product->url_image == '[]' ){
-                        Yii::$app->session->setFlash('error', 'Select image');
-                        return $this->redirect(['product/index']);
+                    if($product->discount != null) {
+                        $promo = Promotion::find()
+                        ->where(['>' ,'dtEnd', date('Y-m-d')])
+                        ->andWhere(['=','category_id',  $product->category_id])
+                        ->one();
+
+                        if($promo != null) {
+                            Yii::$app->session->setFlash('error', 'Сannot add a discount');
+                            return $this->redirect(['product/create']);
+                        }
                     }
                     
                     if($product->save()){
@@ -119,6 +143,7 @@
             $model->description = $product->description;
             $model->price = $product->price;
             $model->category_id = $product->category_id;
+            $model->discount = $product->discount;
  
             $categories = Category::find()->all();
             foreach($categories as $category) {

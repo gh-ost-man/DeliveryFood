@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = 'Delivery Food';
-
+$i=0; 
 $this->registerCss(
   `
     .bg-nav
@@ -16,48 +16,37 @@ $this->registerCss(
   `);
 ?>
 <div class="container-fluid">
-<div class="container">
-    <div id="carouselExampleControls" class="carousel slide m-3" data-ride="carousel">
-  <div class="carousel-inner">
-  <?php
-   
-     foreach ($promotion as $key => $value) {
-      $images= json_decode($value->promotion_url,true);
-    ?>
-    <div class="carousel-item active">
-      <img src="<?= $images[0]?>" class="d-block w-100" style="height: 500px;" alt="...">
+  <?php if($promotion) : ?>
+    <div class="container">
+      <div id="carouselExampleControls" class="carousel slide m-3" data-ride="carousel">
+        <div class="carousel-inner">
+          <?php foreach ($promotion as $key => $value) : $images= json_decode($value->promotion_url,true); ?>
+            <div class="carousel-item active">
+              <img src="<?= $images[0]?>" class="d-block w-100" style="height: 500px;" alt="...">
+            </div>
+          <?php break; endforeach?>
+        
+          <?php foreach ($promotion as $key => $value) : $i++;
+            $images = json_decode($value->promotion_url,true);
+            if($i > 1) : ?>
+              <div class="carousel-item">
+                <img src="<?= $images[0]?>" class="d-block w-100" style="height: 500px;" alt="...">
+              </div>
+            <?php endif ?>
+          <?php endforeach?>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
     </div>
-    <?php
-    break;
-     }
-    ?>
-    <?php
-    $i=0;
-     foreach ($promotion as $key => $value) {
-       $i++;
-      $images= json_decode($value->promotion_url,true);
-      if($i>1)
-      {
-    ?>
-    <div class="carousel-item">
-      <img src="<?= $images[0]?>" class="d-block w-100" style="height: 500px;" alt="...">
-    </div>
-    <?php
-      }
-     }
-    ?>
-    
-  </div>
-  <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-  
+  <?php endif ?>
+
   <div class="row row-cols-1 row-cols-md-3 mt-4">
     <?php  foreach ($products as $key => $value) :  $image= json_decode($value["url_image"],true) ?>
       <div class="col mb-4">

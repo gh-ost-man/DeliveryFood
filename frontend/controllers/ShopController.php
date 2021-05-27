@@ -20,7 +20,10 @@
         {
             $category = Category::find()->where(['id' => $id ])->one();
             $products = Product::find()->where(['category_id' => $id])->all();
-            $promotions = Promotion::find()->where(['category_id' => $id])->one();
+            $promotions = Promotion::find()
+            ->where(['>' , 'dtEnd', date('Y-m-d')])
+            ->andWhere(['<=', 'dtStart', date('Y-m-d'),])
+            ->one();
 
             return $this->render('view', [
                 'category' => $category,
