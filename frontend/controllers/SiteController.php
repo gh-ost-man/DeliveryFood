@@ -86,6 +86,7 @@ class SiteController extends Controller
         ->asArray()
         ->all();
 
+        
         $items = array_reverse($product, true);
         $products = [];
         $i = 0;

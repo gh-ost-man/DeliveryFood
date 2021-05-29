@@ -79,8 +79,6 @@
                     $tovar->discount = $_POST['discount'];
                     $tovar->url_image = json_encode($imagePath);
                     
-
-
                     if($tovar->discount != null) {
                         $promo = Promotion::find()
                         ->where(['>' ,'dtEnd', date('Y-m-d')])
@@ -108,8 +106,6 @@
                 }
                 return $this->redirect(['product/index']);
             }
-
-          
 
             return $this->render('create', [
                 'model' => $model,

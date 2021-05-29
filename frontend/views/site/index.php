@@ -6,15 +6,14 @@
   use yii\helpers\Url;
 
   $this->title = 'Delivery Food';
+  
   $i=0; 
-
-
 ?>
 
 <div class="container-fluid">
   <?php if($promotion) : ?>
     <div class="text-center"> 
-      <img src="<?= json_decode($promotion->promotion_url,true)[0]?>" class="w-75 " alt="...">
+      <img src="<?= json_decode($promotion->promotion_url,true)[0]?>" class="w-75" alt="...">
     </div>
   <?php endif ?>
 

@@ -65,16 +65,16 @@ AppAsset::register($this);
         ]);
       
         if (Yii::$app->user->isGuest) {
-            $menuItems[] = ['label' => 'About us', 'url' => ['/shop/about']];
-            $menuItems[] = ['label' => 'Basket', 'url' =>  ['/basket/index']];
-            $menuItems[] = ['label' => 'Sign up', 'url' => ['/site/signup']];
-            $menuItems[] = ['label' => 'Sign in', 'url' => ['/site/login']];
+            $menuItems[] = ['label' => 'About us', 'url' => ['shop/about']];
+            $menuItems[] = ['label' => 'Basket', 'url' =>  ['basket/index']];
+            $menuItems[] = ['label' => 'Sign up', 'url' => ['site/signup']];
+            $menuItems[] = ['label' => 'Sign in', 'url' => ['site/login']];
         } else {
-            $menuItems[] = ['label' => 'About us', 'url' => ['/shop/about']];
-            $menuItems[] = ['label' => 'Basket', 'url' =>  ['/basket/index']];
+            $menuItems[] = ['label' => 'About us', 'url' => ['shop/about']];
+            $menuItems[] = ['label' => 'Basket', 'url' =>  ['basket/index']];
 
             $menuItems[] = '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
+                . Html::beginForm(['site/logout'], 'post')
                 . Html::submitButton(
                     'Logout (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn text-white']
@@ -94,7 +94,7 @@ AppAsset::register($this);
     <div class="bg-nav">
         <div class="container">
             <?php foreach(Category::find()->all() as $category) : ?>
-                <a class="text-white" href="<?= Url::to(["/shop/" . $category->id . "view"]) ?>"><?= $category->title; ?></a>
+                <a class="text-white" href="<?= Url::to(["shop/" . $category->id . "view"]) ?>"><?= $category->title; ?></a>
             <?php endforeach ?>
         </div>
     </div>

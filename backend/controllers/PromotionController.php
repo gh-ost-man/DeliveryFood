@@ -29,6 +29,9 @@
                     ],
                 ],
             ];
+
+            
+
         }
         public function actionIndex()
         {
@@ -106,7 +109,6 @@
                                 $tovar->save();
                             }
                         }
-
 
                         return $this->redirect(['promotion/index']);
                     }
