@@ -9,12 +9,12 @@
     $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>       
-  hr
-  {
-    height: 1px;
-    background-color: black;
-    border: none;
-  }
+    hr
+    {
+        height: 1px;
+        background-color: black;
+        border: none;
+    }
 </style>
 
 <h1>Basket</h1>
@@ -44,24 +44,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach($products as $product) : ?>
-                    <tr>
-                        <th scope="row"><?= $i++ ?></th>
-                        <td>
-                            <div>
-                                <a href="<?= Url::to(['shop/'. $product['id'] .'item']) ?>">
-                                    <img src="/<?= $product['url_image'][0] ?>" style="width:70px" alt="">
-                                </a>
-                            </div>
-                        </td>
-                        <td><?= $product['title'] ?></td>
-                        <td>
-                            <input style="width:40%" type="number" name="<?= isset($order->id)? $order->id: 'guest' ?>" id="<?= $product['id'] ?>" class="product-count" value="<?= $product['count'] ?>" min="1">
-                        <td class="price-<?= $product['id']?>"><?= $product['price'] ?> $</td>
-                        <td><a id="<?= $product['id'] ?>" class="item">Delete</a></td>
-                    </tr>
-                    <input  class="invisible" id="product-<?=$product['id']?>" value="<?= $product['discount']?>">
-                <?php endforeach?>
+                    <?php foreach($products as $product) : ?>
+                        <tr>
+                            <th scope="row"><?= $i++ ?></th>
+                            <td>
+                                <div>
+                                    <a href="<?= Url::to(['shop/'. $product['id'] .'item']) ?>">
+                                        <img src="/<?= $product['url_image'][0] ?>" style="width:70px" alt="">
+                                    </a>
+                                </div>
+                            </td>
+                            <td><?= $product['title'] ?></td>
+                            <td>
+                                <input style="width:40%" type="number" name="<?= isset($order->id)? $order->id: 'guest' ?>" id="<?= $product['id'] ?>" class="product-count" value="<?= $product['count'] ?>" min="1">
+                            <td class="price-<?= $product['id']?>"><?= $product['price'] ?> $</td>
+                            <td><button id="<?= $product['id'] ?>" class="item btn btn-danger">Delete</button></td>
+                        </tr>
+                        <input  class="invisible" id="product-<?=$product['id']?>" value="<?= $product['discount']?>">
+                    <?php endforeach?>
                 </tbody>
             </table>
             <h5 id="discount" class="<?= ($discount_sum>0)? 'd-block': 'd-none'?>">Discount: -<span id="discount_value"><?= ($discount_sum != '' && $discount_sum>0)? $discount_sum: ''?></span> $</h5>
@@ -76,9 +76,6 @@
 
   let host = window.location.protocol + "//" + window.location.host;
   
-//   Total();
-  
- 
   $('.product-count').change(function(){
     let id = $(this).attr('id');
     let count = $(this).val();
@@ -94,7 +91,7 @@
         'count' : count
       },
       success: function(data){
-          console.log(data);
+        console.log(data);
         if(data.discount == 0) {
             $('#discount').addClass('d-none');
             $('#discount').removeClass('d-block');
@@ -108,43 +105,7 @@
       }
     });
 
-    // Total();
   });
-
-//   function Total(){
-//     let total = 0;
-//     let sum_dis = 0;
-//     $('.product-count').each(function(){
-//         let id = $(this).attr('id');
-//         let count = $(this).val();
-//         let price = parseInt($('.price-' + id).html());
-//         let discount =  $('#product-'+ id).val();
-//         let sum = 0;
-        
-//         if(discount == '') {
-//             sum = price * count ;
-//             $('#discount').removeClass('d-none');
-//         } else {
-//             sum = (price - discount) * count ;
-//             sum_dis += parseInt(discount) * count;
-
-//             if(!$('#discount').hasClass('d-block')) {
-//                 $('#discount').addClass('d-block');
-//             }
-//         }
-
-//         if(sum_dis > 0) {
-//             $('#discount_value').html(sum_dis);
-//         } else {
-//             sum_dis = 0;
-//         }
-//         console.log(`id =  ${id}\nCount = ${count}\nPrice = ${price}\nDiscount = ${discount}\nTotal = ${sum}`);
-
-//         total += sum;
-//     });
-    
-//     $('#total').html(total);
-//   }
 
 </script>
 
@@ -166,37 +127,33 @@
 </script>
 
 <script>
-
-    $('.item').click(function(){
-       let index = this.parentNode.parentNode.rowIndex;
+    $('.item').click(function(e){
+        e.preventDefault();
         
-        var id = $(this).attr('id');
+        let index = this.parentNode.parentNode.rowIndex;
+        
+                
+        let id = $(this).attr('id');
         $.ajax({
-            type: 'post',
             url: 'delete-item',
-            data: { 'id' : id, },
-            success: (function(data) {
+            type: 'post',
+            data: {
+                'id' : id 
+            },
+            success: function(data){
                 document.getElementById("basket").deleteRow(index);
                 console.log(data);
-                if(data == 1) {
-                    $('#discount_value').html(0);
-                    $('#total').html(0);
+                if(data.discount == 0) {
                     $('#discount').addClass('d-none');
                     $('#discount').removeClass('d-block');
+                    
                 } else {
-                    if(data.discount == 0) {
-                        $('#discount').addClass('d-none');
-                        $('#discount').removeClass('d-block');
-                
-                    } else {
-                        $('#discount').addClass('d-block');
-                        $('#discount').removeClass('d-none');
-                    }
-                    $('#discount_value').html(data.discount);
-                    $('#total').html(data.total);
+                    $('#discount').addClass('d-block');
+                    $('#discount').removeClass('d-none');
                 }
-            })
-
+                $('#discount_value').html(data.discount);
+                $('#total').html(data.total);
+            }
         });
     });
 

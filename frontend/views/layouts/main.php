@@ -37,24 +37,6 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
-<?php 
-    $this->registerCss(
-        " 
-            #w0-collapse
-            {
-                flex-grow: 0; 
-            }
-            #menu 
-            {
-                list-type: none;
-            }
-            .bg-nav
-            {
-                background-color: rgba(34,38,42,255);
-            }
-        "
-        );
-?>
 <div class="wrap">
     <?php
         $this->registerCss(
@@ -69,7 +51,7 @@ AppAsset::register($this);
             }
             .bg-nav
             {
-                background-color: rgba(34,38,42,255);
+                background-color: #222;
             }
         "
         );

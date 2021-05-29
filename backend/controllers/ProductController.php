@@ -38,19 +38,10 @@
             $start_page = 1;
             $end_page = 1;
             $count = count(Product::find()->all());
-
-            $products_all = Product::find()->all();
-
-            $count = count($products_all);
+            
             $page = (isset($_GET['page']))? $_GET['page'] : 1;
-    
             $from = ($page - 1) * $nodesOnPage;
-    
-            $products = Product::find()
-            ->offset($from)
-            ->limit($nodesOnPage)
-            ->all();
-
+           
             if($page >= 10){
                 $start_page = $page - 5;
                 $end_page = (ceil( $count / $nodesOnPage) > $page + $nodesOnPage)? $page + $nodesOnPage: ceil( $count / $nodesOnPage);
@@ -58,9 +49,9 @@
                 $start_page = 1;
                 $end_page =(ceil($count / $nodesOnPage) > 10) ? 10 : ceil($count / $nodesOnPage);
             }
-           
+    
             return $this->render('index',[
-                'products' => $products,
+                'products' => Product::find()->offset($from)->limit($nodesOnPage)->all(),
                 'start_page' => $start_page,
                 'end_page' => $end_page,
                 'page' => $page

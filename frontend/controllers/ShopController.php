@@ -23,6 +23,7 @@
             $promotions = Promotion::find()
             ->where(['>' , 'dtEnd', date('Y-m-d')])
             ->andWhere(['<=', 'dtStart', date('Y-m-d'),])
+            ->andWhere(['=','category_id', $category->id])
             ->one();
 
             return $this->render('view', [

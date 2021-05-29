@@ -33,8 +33,26 @@
         public function actionIndex()
         {
             $users = [];
-            $guests = [];
             $orders = Order::find()->all();
+
+            $nodesOnPage = 10;
+            $page = 1;
+            $start_page = 1;
+            $end_page = 1;
+            $count = count($orders);
+            
+            $page = (isset($_GET['page']))? $_GET['page'] : 1;
+            $from = ($page - 1) * $nodesOnPage;
+           
+            if($page >= 10){
+                $start_page = $page - 5;
+                $end_page = (ceil( $count / $nodesOnPage) > $page + $nodesOnPage)? $page + $nodesOnPage: ceil( $count / $nodesOnPage);
+            }else{
+                $start_page = 1;
+                $end_page =(ceil($count / $nodesOnPage) > 10) ? 10 : ceil($count / $nodesOnPage);
+            }
+            
+
             foreach($orders as $order){
                 if(isset($order->user_id)){
                     $users[$order->user_id] = User::find()->where(['id' => $order->user_id])->one();
@@ -44,8 +62,11 @@
             }
 
             return $this->render('index',[
-                'orders' => $orders,
-                'users' => $users
+                'orders' => Order::find()->offset($from)->limit($nodesOnPage)->all(),
+                'users' => $users,
+                'start_page' => $start_page,
+                'end_page' => $end_page,
+                'page' => $page
             ]);
         }
         public function actionOrder($id)
