@@ -57,10 +57,30 @@
                     'role' => $role 
                 ];
             }            
+
+            $nodesOnPage = 10;
+            $page = 1;
+            $start_page = 1;
+            $end_page = 1;
+            $count = count($users);
+            
+            $page = (isset($_GET['page']))? $_GET['page'] : 1;
+            $from = ($page - 1) * $nodesOnPage;
+           
+            if($page >= 10){
+                $start_page = $page - 5;
+                $end_page = (ceil( $count / $nodesOnPage) > $page + $nodesOnPage)? $page + $nodesOnPage: ceil( $count / $nodesOnPage);
+            }else{
+                $start_page = 1;
+                $end_page =(ceil($count / $nodesOnPage) > 10) ? 10 : ceil($count / $nodesOnPage);
+            }
         
             return  $this->render('index', [
                 'user_array' => $user_array,
-                'role_array' => $role_array
+                'role_array' => $role_array,
+                'start_page' => $start_page,
+                'end_page' => $end_page,
+                'page' => $page
             ]);
         }
 

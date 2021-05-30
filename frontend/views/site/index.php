@@ -22,7 +22,7 @@
       <div class="col mb-4">
         <div class="card h-100">
           <a href="<?= Url::to(['shop/'. $value['id'] .'item']) ?>">
-            <img src="<?= $image[0]?>" class="card-img-top" alt="...">
+            <img src="/<?= $image[0]?>" class="card-img-top" alt="...">
           </a>
           <div class="card-body">
             <h5 class="card-title"><?= $value["title"]?></h5>

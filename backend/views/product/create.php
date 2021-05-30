@@ -6,7 +6,7 @@ use kartik\select2\Select2;
 use kartik\widgets\FileInput;
 use yii\helpers\Url;
 
-$this->title = 'Create product';
+$this->title = ($model->title)? 'Update product': 'Create product';
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

@@ -17,6 +17,7 @@ use frontend\models\ContactForm;
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 use common\models\Category;
 use common\models\Product; 
@@ -120,10 +121,11 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+           
             return $this->goBack();
         } else {
             $model->password = '';
-
+            Yii::$app->session->setFlash('error', "Incorect email or password");
             return $this->render('login', [
                 'model' => $model,
                 'categories' => Category::find()->all()

@@ -66,21 +66,26 @@ class BasketController extends Controller {
                 }
             } else {
                 foreach($items_order as $item) {
-                    $total += $item->price;
+                    $p = Product::find()->where(['id' => $item->product_id])->one();
+                    
+                    if($p->discount != null) {
+                        $total += $item->price - ($p->discount * $item['count']);
+                        $discount += $p->discount * $item->count;
+                    } else {
+                        $total += $item->price;
+                    }
                 }
             }
     
             return ['total' => $total, 'discount' => $discount];
         } else {
-            // $info = unserialize($_COOKIE['delivery_food_basket'], ["allowed_classes" => false]);
-            
             if($promotion != null) {
+                
                 foreach($items as $item) {
                     for($i = 0; $i < $item['count']; $i++) {
                         $cart[] = $item['product_id'];
                     }
                 }
-    
                 foreach($cart as $id) {
                     $tovar = Product::find()->where(['id' => $id])->one();
                    
@@ -97,6 +102,7 @@ class BasketController extends Controller {
                         $tovars[] = $tovar;
                     }
                 }
+                
                 foreach($tovars as $item){
                     if($item['discount'] != null) {
                         $total += $item['price'] - $item['discount'];
@@ -108,7 +114,13 @@ class BasketController extends Controller {
     
             } else {
                 foreach($items as $item) {
-                    $total += $item['price'];
+                    $p = Product::find()->where(['id' => $item['product_id']])->one();
+                    if($p['discount'] != null) {
+                        $total += $item['price'] - ($p['discount'] * $item['count']);
+                        $discount += $p['discount'] * $item['count'];
+                    } else {
+                        $total += $item['price'];
+                    }
                 }
             }
     
@@ -177,7 +189,7 @@ class BasketController extends Controller {
                         for($i = 0; $i<count($info); $i++) {
                             if($info[$i]['product_id'] == $item['product_id']) {
                                 array_splice($info, $i, 1);
-                                setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 )); //  time() +(60*60*24*10)) -> 10 days
+                                setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
                                 break;
                             }
                         }
@@ -186,7 +198,6 @@ class BasketController extends Controller {
                 $total = $this->getTotalPrice(null, $info)['total'];
                 $discount = $this->getTotalPrice(null, $info)['discount'];
 
-                $cart_list = $info;
                 return $this->render('index', [
                     'order' => [],
                     'products' => $products,
@@ -263,8 +274,7 @@ class BasketController extends Controller {
                     'count' => 1,
                     'price' => $product->price
                 ];
-                $cart_list = $info;
-                setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 )); //  time() +(60*60*24*10)) -> 10 days
+                setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
             }
         }
     
@@ -274,6 +284,7 @@ class BasketController extends Controller {
     public function actionUpdateItem()
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;// формат відповіді
+        
         $idUser = Yii::$app->user->id;
 
         if($_POST != null) {
@@ -296,15 +307,15 @@ class BasketController extends Controller {
                 
                 for($i = 0; $i < count($info); $i++) {
                     if($info[$i]['product_id'] == $_POST['product_id']) {
+                        $product = Product::find()->where(['id' => $info[$i]['product_id']])->one();
                         $info[$i]['count'] = $_POST['count'];
-                        $info[$i]['price'] = (float)$info[$i]['price'] * (float)$info[$i]['count'];
-                        
-                       setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ));  //  time() +(60*60*24*10)) -> 10 days
-                       
-                       break;
+                        $info[$i]['price'] = $product->price * $info[$i]['count'] ;
+                        setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
+                        break;
                     }
                 }
-                $cart_list = $info;
+
+
                 return [
                     'total' => $this->getTotalPrice(null, $info)['total'],
                     'discount' => $this->getTotalPrice(null, $info)['discount']
@@ -419,8 +430,7 @@ class BasketController extends Controller {
             $order->address = $_POST['address'];
             if($order->save()) {
                 Yii::$app->session->setFlash('success', "Order booked");
-                $cart_list = [];
-                setcookie("delivery_food_basket", "", time() - ( 60 * 60 * 24 * 10 ));
+                setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
             }
         }
 
@@ -437,10 +447,8 @@ class BasketController extends Controller {
                 Item_Order::deleteAll(['order_id' => $order->id]);
             }
         } else {
-
             if(isset($_COOKIE['delivery_food_basket'])) {
-                $cart_list = [];
-                setcookie("delivery_food_basket", "", time() - ( 60 * 60 * 24 * 10 ));
+                setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
             }
         }
 
@@ -479,11 +487,11 @@ class BasketController extends Controller {
                         }
                     }
                     if(count($info) == 0) {
-                        setcookie("delivery_food_basket", "", time() - ( 60 * 60 * 24 * 10 ));
+                        setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
+
                     } else {
-                        setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 )); //  time() +(60*60*24*10)) -> 10 days
+                        setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
                     }
-                    $cart_list = $info;
                     return [
                         'total' => $this->getTotalPrice(null, $info)['total'],
                         'discount' => $this->getTotalPrice(null, $info)['discount']

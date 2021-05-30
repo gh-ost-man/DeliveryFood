@@ -64,3 +64,23 @@ $this->registerJS($js);
     </tbody>
   </table>
 </div>
+
+<?php if(count($user_array) != 0) :?>
+    <ul class=" pager" >
+        <?php foreach(range($start_page,$end_page) as $p) : if($p == $page) { ?>
+            <li class="active">
+                <?=  Html::a($p, ['index','page' => $p], ['class' => 'page-link', 'style' => [
+                    "background-color" => '#222',
+                    "color" => 'white'
+                ]]);  ?>
+            </li>
+        <?php } else { ?>
+            <li class="">
+                <?=  Html::a($p, ['index','page' => $p], ['class' => 'page-link', 'style' => [
+                    "background-color" => 'white',
+                    "color" => 'black'
+                ]]);  ?>
+            </li>
+        <?php } endforeach?>
+    </ul>
+<?php endif?>
