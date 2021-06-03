@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col-md-6">
         <div class="thumbnail">
-            <img src="/<?= $images[0] ?>" alt="...">
+            <img src="<?= $images[0] ?>" alt="...">
         </div>
     </div>
     <div class="col-md-6">
@@ -25,8 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3>Price: <?= $product->price ?></h3>
         <h3>Category: <?= $category->title?></h3>
         <?php if($product->discount) :?>
-        <h3>Discount: <?= $product->discount?> $</h3>
+            <h3>Discount: <?= $product->discount?> $</h3>
         <?php endif ?>
-
     </div>
 </div>

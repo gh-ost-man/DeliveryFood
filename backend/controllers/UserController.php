@@ -168,22 +168,27 @@
                 'items_order' => $items
             ]);
         }
-        public function actionDelete($id)
+        public function actionDelete()
         {
-            $user = User::findOne(['id' => $id]);
-            $current_user_id =  Yii::$app->user->id;
-          
-            if($user->delete(['id' => $id])) {
-                Yii::$app->session->setFlash('success', "User: < {$user->username} > removed from Database");
-                Yii::$app->AuthManager->revokeAll($id);
-                if($id == $current_user_id) {
-                    Yii::$app->user->logout();
-                    return $this->goHome();
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;// формат відповіді
+
+            if($_POST) {
+                $id = $_POST['id'];
+                $user = User::findOne(['id' => $id]);
+                $current_user_id =  Yii::$app->user->id;
+              
+                if($user->delete(['id' => $id])) {
+                    Yii::$app->AuthManager->revokeAll($id);
+                    if($id == $current_user_id) {
+                        Yii::$app->user->logout();
+                        return $this->goHome();
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'Error deleting user from Database');
+                    return $this->redirect('index');
                 }
-            } else {
-                Yii::$app->session->setFlash('error', 'Error deleting user from Database');
+                return false;
             }
-            return $this->redirect(['user/index']);
         }
 
         public function actionProfile()
@@ -193,12 +198,14 @@
             $model = new SignupForm();
             $model->username = $user->username;
             $model->email = $user->email;
+            $model->address = $user->address;
             $model->password = '';
             
             if ($model->load(Yii::$app->request->post())) {
 
                 $user->username = $model->username;
                 $user->email = $model->email;
+                $user->address = $model->address;
                 $user->password = $model->password;
                 if($user->save()){
                     $model->password = '';
@@ -208,7 +215,6 @@
                     ]);
                 }
             }
-    
 
             return $this->render('profile',[
                 'model' => $model

@@ -42,13 +42,13 @@
                 ]
             );?>
     <!-- Table -->
-    <table class="table">
+    <table class="table" id="products" style="min-width: 300px">
         <thead style="background-color: #222; color: white;">
         <tr>
             <th scope="col">#</th>
             <th scope="col">Id</th>
             <th scope="col">Title</th>
-            <th scope="col" style="width: 50%;">Description</th>
+            <th scope="col" style="width: 50%">Description</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -62,7 +62,7 @@
                 <td> 
                     <?=  Html::a('View', ['view','id' => $product['id']], ['class' => 'btn btn-info']);  ?>
                     <?=  Html::a('Update', ['update','id' => $product['id']], ['class' => 'btn btn-update']);  ?>
-                    <?=  Html::a('Delete', ['delete','id' => $product['id']], ['class' => 'btn btn-danger']);  ?>
+                    <button id="<?= $product['id'] ?>" class="item btn btn-danger">Delete</button>
                 </td>
             </tr>
         <?php endforeach ?>
@@ -89,4 +89,24 @@
         <?php } endforeach?>
     </ul>
 <?php endif?>
+
+<script>
+    $('.item').click(function(e){
+        e.preventDefault();
+        let index = this.parentNode.parentNode.rowIndex;
+        let id = $(this).attr('id');
+
+        $.ajax({
+            url: 'delete',
+            type: 'post',
+            data: {
+                'id' : id 
+            },
+            success: function(data){
+                document.getElementById("products").deleteRow(index);
+            }
+        });
+    });
+
+</script>
 

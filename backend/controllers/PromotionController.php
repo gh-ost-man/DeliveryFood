@@ -64,12 +64,12 @@
                 $promotion = new Promotion;
                 $model->promotion_url = UploadedFile::getInstances($model, 'promotion_url');
                 $model->category_id = $_POST['category_id'];
+                
                 if(count($model->promotion_url) == 0) {
                     Yii::$app->session->setFlash('error', 'Select image');
                     return $this->redirect(['promotion/create']);
                 }
 
-             
                 if ($imagePath = $model->upload()){
 
                     $promotion->title = $model->title;
@@ -244,21 +244,27 @@
             return true;
         }
 
-        public function actionDelete($id)
+        public function actionDelete()
         {
-            $promotion = Promotion::findOne(['id' => $id]);
-            $images = json_decode($promotion->promotion_url, true);
-          
-            if($promotion->delete(['id' => $id])) {
-                foreach($images as $image){
-                    unlink($image);
-                }
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;// формат відповіді
 
-                Yii::$app->session->setFlash('success', "Promotion: < {$promotion->title} > removed from Database");
-            } else {
-                Yii::$app->session->setFlash('error', 'Errpr removing promotion from DB');
+            if($_POST) {
+                $id = $_POST['id'];
+
+                $promotion = Promotion::findOne(['id' => $id]);
+                $images = json_decode($promotion->promotion_url, true);
+              
+                if($promotion->delete(['id' => $id])) {
+                    foreach($images as $image){
+                        unlink($image);
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'Errpr removing promotion from DB');
+                    return true;
+                }
+    
+                return false;
             }
 
-            return $this->redirect(['promotion/index']);
         }
     }

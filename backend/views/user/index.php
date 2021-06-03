@@ -35,7 +35,7 @@ $this->registerJS($js);
   <!-- Default panel contents -->
   <div class="panel-heading"><h4>Users</h4></div>
   <!-- Table -->
-  <table class="table">
+  <table class="table" id="users">
     <thead style="background-color: #22262A; color: white;">
       <tr>
         <th scope="col">#</th>
@@ -57,7 +57,7 @@ $this->registerJS($js);
               <td> 
                   <?=  Html::a('View', ['view','id' => $user['id']], ['class' => 'btn btn-info']);  ?>
                   <?=  Html::a('View order history', ['history','id' => $user['id']], ['class' => 'btn btn-success']);  ?>
-                  <?=  Html::a('Delete', ['delete','id' => $user['id']], ['class' => 'btn btn-danger']);  ?>
+                  <button id="<?= $user['id'] ?>" class="item btn btn-danger">Delete</button>
               </td>
           </tr>
       <?php endforeach ?>
@@ -84,3 +84,25 @@ $this->registerJS($js);
         <?php } endforeach?>
     </ul>
 <?php endif?>
+
+<script>
+    $('.item').click(function(e){
+        e.preventDefault();
+        
+        let index = this.parentNode.parentNode.rowIndex;
+        
+                
+        let id = $(this).attr('id');
+        $.ajax({
+            url: 'delete',
+            type: 'post',
+            data: {
+                'id' : id 
+            },
+            success: function(data){
+                document.getElementById("users").deleteRow(index);
+            }
+        });
+    });
+
+</script>

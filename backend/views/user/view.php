@@ -40,6 +40,7 @@
         <p class="h3" style="font-weight: 600;">Id: <?= $user['id']?></p>
         <p class="h3" style="font-weight: 600;">Username: <?= $user['username']?></p>
         <p class="h3" style="font-weight: 600;">Email: <?= $user['email']?></p>
+        <p class="h3" style="font-weight: 600;">Address: <?= ($user['address'])? $user['address'] : 'None'?></p>
         <div>
             <label class="h3">Role</label> 
             <?= Select2::widget([

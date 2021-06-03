@@ -5,6 +5,7 @@
 
     $i = 1;
 
+
     $this->title = 'Basket';
     $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -28,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label>Address</label>
-                <input type="text" class="form-control" name="address" required>
+                <input type="text" class="form-control" name="address" value="<?= isset($user->address)? $user->address : ''?>" required>
             </div>
         </div>
         <div class="col-md-12">
@@ -36,7 +37,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col"></th>
+                        <th scope="col" style="width: 100px"></th>
                         <th scope="col">Name</th>
                         <th scope="col">Count</th>
                         <th scope="col">Price</th>
@@ -50,13 +51,14 @@
                             <td>
                                 <div>
                                     <a href="<?= Url::to(['shop/'. $product['id'] .'item']) ?>">
-                                        <img src="/<?= $product['url_image'][0] ?>" style="width:70px" alt="">
+                                        <img src="/<?= $product['url_image'][0] ?>" class="w-100" alt="">
                                     </a>
                                 </div>
                             </td>
                             <td><?= $product['title'] ?></td>
                             <td>
-                                <input style="width:40%" type="number" name="<?= isset($order->id)? $order->id: 'guest' ?>" id="<?= $product['id'] ?>" class="product-count" value="<?= $product['count'] ?>" min="1">
+                                <input class="product-count w-50" type="number" name="<?= isset($order->id)? $order->id: 'guest' ?>" id="<?= $product['id'] ?>"  value="<?= $product['count'] ?>" min="1">
+                            </td>
                             <td class="price-<?= $product['id']?>"><?= $product['price'] ?> $</td>
                             <td><button id="<?= $product['id'] ?>" class="item btn btn-danger">Delete</button></td>
                         </tr>
@@ -91,11 +93,9 @@
         'count' : count
       },
       success: function(data){
-        console.log(data);
         if(data.discount == 0) {
             $('#discount').addClass('d-none');
             $('#discount').removeClass('d-block');
-            
         } else {
             $('#discount').addClass('d-block');
             $('#discount').removeClass('d-none');
@@ -132,7 +132,6 @@
         
         let index = this.parentNode.parentNode.rowIndex;
         
-                
         let id = $(this).attr('id');
         $.ajax({
             url: 'delete-item',
@@ -142,7 +141,6 @@
             },
             success: function(data){
                 document.getElementById("basket").deleteRow(index);
-                console.log(data);
                 if(data.discount == 0) {
                     $('#discount').addClass('d-none');
                     $('#discount').removeClass('d-block');

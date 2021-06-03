@@ -9,8 +9,8 @@
     use yii\filters\AccessControl;
 
     use common\models\Category;
+    use common\models\Product;
     use backend\models\CategoryForm;
-    
    
     class CategoryController extends Controller
     {
@@ -32,23 +32,21 @@
         
         public function actionIndex()
         {
-            $categories = Category::find()->asArray()->all();
-
             return $this->render('index',[
-                'categories' => $categories
+                'categories' =>Category::find()->asArray()->all()
             ]);
         }
 
         public function actionCreate()
         {
             $model = new CategoryForm;
+
             if($model->load(Yii::$app->request->post()))
             {
-           
-                $discount = new Category;
-                $discount->title = $model->title;
+                $category = new Category;
+                $category->title = $model->title;
                 
-                if($discount->save())
+                if($category->save())
                 {
                     Yii::$app->session->setFlash('success', 'Category saved into DB');
                 }
@@ -57,7 +55,6 @@
                 }
                 
                 return  $this->redirect(['category/index']);
-                    
             }
         
             return $this->render('create', [
@@ -70,6 +67,7 @@
 
         public function actionUpdate($id){
             $model = new CategoryForm;
+
             $category = Category::findOne(['id' => $id]);
 
             if($model->load(Yii::$app->request->post()))
@@ -100,18 +98,30 @@
             ]);
         }
 
-        public function actionDelete($id){
-            $model = new CategoryForm; 
-            $category = Category::findOne(['id' => $id]);
-        
-            if($category->delete())
-            {
-                Yii::$app->session->setFlash('success', 'Category deleted from DB ');
-            }
-            else{
-                Yii::$app->session->setFlash('error', 'Error! Category NOT deleted from DB');
-            }
+        public function actionDelete(){
             
-            return  $this->redirect(['category/index']);
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;// формат відповіді
+            
+            if($_POST) {
+                $model = new CategoryForm; 
+                $id = $_POST['id'];
+                $category = Category::findOne(['id' => $id]);
+                $products = Product::find()->where(['category_id' => $id])->all();
+            
+                if($category->delete()){
+
+                    foreach($products as $product) {
+                        $images = json_decode($product->url_image, true);
+                        foreach($images as $image){
+                            unlink($image);
+                        }
+                    }
+                    return  false;
+                }
+                else{
+                    Yii::$app->session->setFlash('error', 'Error! Category NOT deleted from DB');
+                    return $this->redirect('index');
+                }
+            }
         }
-}
+    }

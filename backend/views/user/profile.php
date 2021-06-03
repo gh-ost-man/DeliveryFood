@@ -31,11 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="row">
             <div class="col-md-12">
+                <?= $form->field($model, 'address')->textInput(); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <?= $form->field($model, 'password')->passwordInput(); ?>
             </div>
         </div>
-       
-     
         <div class="row">
             <div class="col-md-12">
                 <?= Html::submitButton('OK', ['class' => 'btn btn-success btn-block m-2']); ?>

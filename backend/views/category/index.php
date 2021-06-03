@@ -35,7 +35,7 @@ $i = 1;
             ]
         );?>
   <!-- Table -->
-  <table class="table">
+  <table class="table" id="categories">
     <thead style="background-color: #22262A; color: white;">
       <tr>
         <th scope="col">#</th>
@@ -51,11 +51,30 @@ $i = 1;
               <th scope="row"><?= $category['id']; ?></th>
               <td><?= $category['title'] ?></td>
               <td> 
-                  <?=  Html::a('Update', ['update','id' => $category['id']], ['class' => 'btn btn-update']);  ?>
-                  <?=  Html::a('Delete', ['delete','id' => $category['id']], ['class' => 'btn btn-danger']);  ?>
+                <?=  Html::a('Update', ['update','id' => $category['id']], ['class' => 'btn btn-update']);  ?>
+                <button id="<?= $category['id'] ?>" class="item btn btn-danger">Delete</button>
               </td>
           </tr>
       <?php endforeach ?>
     </tbody>
   </table>
 </div>
+
+<script>
+  $('.item').click(function(e){
+    e.preventDefault();
+    
+    let index = this.parentNode.parentNode.rowIndex;
+    let id = $(this).attr('id');
+
+    $.ajax({
+        url: 'delete',
+        type: 'post',
+        data: { 'id' : id },
+        success: function(data){
+          document.getElementById("categories").deleteRow(index);
+        }
+    });
+  });
+
+</script>

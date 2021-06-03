@@ -22,6 +22,9 @@ use yii\widgets\ActiveForm;
 use common\models\Category;
 use common\models\Product; 
 use common\models\Promotion;
+use common\models\Order;
+use common\models\Item_Order;
+
 
 /**
  * Site controller
@@ -86,17 +89,39 @@ class SiteController extends Controller
         ->orderBy('id')
         ->asArray()
         ->all();
-
         
-        $items = array_reverse($product, true);
+        
         $products = [];
-        $i = 0;
         
-        foreach($items as $item) {
-            $i++;
-            if($i > 9 || $i == count($items)) break;
-            array_push($products, $item);
+        foreach(Category::find()->all() as $cat) {
+            $prod = Product::find()->where(['category_id' => $cat->id])->offset(0)->limit(6)->asArray()->all();
+            $products[$cat->id] = $prod;
         }
+
+        $cart = [];
+
+        $idUser = Yii::$app->user->id;
+        if($idUser) {
+            $order = Order::find()->where(['user_id' => $idUser])->andWhere(['=','status','new'])->one();
+
+            if($order!= null) {
+                $items_order = Item_Order::find()->where(['order_id' => $order->id])->all();
+                foreach($items_order as $item) {
+                    $id = $item['product_id'];
+                    $cart["prod-$id"] = $item;
+                }
+            }
+
+        } else {
+            if(isset($_COOKIE['delivery_food_basket'])) {
+                $info = unserialize($_COOKIE['delivery_food_basket'], ["allowed_classes" => false]);
+                foreach($info as $item) {
+                    $id = $item['product_id'];
+                    $cart["prod-$id"] = $item;
+                }
+            }
+        }
+
 
         return $this->render('index',[
             'categories' => Category::find()->all(),
@@ -104,7 +129,8 @@ class SiteController extends Controller
             'promotion' =>  Promotion::find()
             ->where(['>' , 'dtEnd', date('Y-m-d')])
             ->andWhere(['<=', 'dtStart', date('Y-m-d'),])
-            ->one()
+            ->one(),
+            'cart' => $cart
         ]);
     }
 
@@ -121,11 +147,9 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-           
             return $this->goBack();
         } else {
             $model->password = '';
-            Yii::$app->session->setFlash('error', "Incorect email or password");
             return $this->render('login', [
                 'model' => $model,
                 'categories' => Category::find()->all()

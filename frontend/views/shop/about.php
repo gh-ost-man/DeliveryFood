@@ -1,10 +1,137 @@
 <?php
 
 $this->title = 'About us';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    /*==================
+        ABOUT US SECTION
+    ====================*/
+    #mu-about-us {
+        display: inline;
+        float: left;
+        width: 100%;
+        padding: 100px 0;
+    }
+    #mu-about-us .mu-about-us-area {
+        display: inline;
+        float: left;
+        width: 100%;
+    }
+    #mu-about-us .mu-about-us-area .mu-about-us-left {
+        display: inline;
+        float: left;
+        margin-top: 20px;
+        padding-top: 30px;
+        width: 100%;
+    }
+    #mu-about-us .mu-about-us-area .mu-about-us-left p {
+        line-height: 24px;
+    }
+    #mu-about-us .mu-about-us-area .mu-about-us-left ul {
+        margin-bottom: 20px;
+        padding-left: 20px;
+    }
+    #mu-about-us .mu-about-us-area .mu-about-us-left ul li {
+        line-height: 24px;
+        margin-bottom: 10px;
+    }
+    #mu-about-us .mu-about-us-area .mu-about-us-left ul li:before {
+        content: "\f24d";
+        font-family: fontAwesome;
+        margin-right: 10px;
+    }
+    #mu-about-us .mu-about-us-area .mu-about-us-right {
+        display: inline;
+        float: left;
+        margin-top: 20px;
+        padding-top: 30px;
+        width: 100%;
+    }
+    .mu-title {
+        display: inline;
+        float: left;
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .mu-title .mu-subtitle {
+        font-size: 50px;
+        font-family: "Tangerine", cursive;
+        line-height: 30px;
+    }
+    .mu-title h2 {
+        color: #000;
+        font-size: 35px;
+        margin-bottom: 5px;
+    }
+    .mu-title i {
+        ont-size: 18px;
+    }
+    .mu-title .mu-title-bar {
+        position: absolute;
+    }
+    .mu-title .mu-title-bar::before {
+        content: "";
+        height: 2px;
+        left: 8px;
+        position: absolute;
+        top: 10px;
+        width: 100px;
+    }
+    .mu-title .mu-title-bar::after {
+        content: "";
+        height: 2px;
+        right: 15px;
+        position: absolute;
+        top: 10px;
+        width: 100px;
+    }
 
+</style>
 
+  <!-- Start About us -->
+  <section id="" class="p-2" style="background-color: #222;">
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mu-about-us-area">
+            <div class="mu-title">
+              <span class="mu-subtitle">Delivery Food</span>
+              <h3 class="text-white">ABOUT US</h3>
+              <i class="fa fa-spoon"></i>              
+              <span class="mu-title-bar"></span>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mu-about-us-left text-white">
+                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam minus aliquid, itaque illum assumenda repellendus dolorem, dolore numquam totam saepe, porro delectus, libero enim odio quo. Explicabo ex sapiente sit eligendi, facere voluptatum! Quia vero rerum sunt porro architecto corrupti eaque corporis eum, enim soluta, perferendis dignissimos, repellendus, beatae laboriosam.</p>                              
+                  <ul>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia.</li>                    
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia.</li>
+                  </ul>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque similique molestias est quod reprehenderit, quibusdam nam qui, quam magnam. Ex.</p>  
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mu-about-us-right">                
+                 <ul class="mu-abtus-slider">                 
+                   <li><img class="w-75" src="\images\about\delivery.png" alt="img"></li>
+                 </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End About us -->
+
+<!-- 
 <div class="mb-3">
     <h1 class="text-center">About us</h1>
     <hr style="border: 1px solid black;">
@@ -24,4 +151,5 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-</div>
+</div> -->
+ 

@@ -59,7 +59,7 @@
 
 <div class="row">
   <?php  foreach ($products as $key => $value) :  $image= json_decode($value->url_image,true) ?>
-    <div class="col-md-4 mt-4">
+    <div class="col-md-3 mt-4">
       <div class="card h-100">
         <?php if($promotions) : ?>
           <div class="corner-text-wrapper">
@@ -87,9 +87,30 @@
               <h5 class="float-left mr-2 text-danger" style="text-decoration: line-through;"><?= $value->price?>$</h5>
             <?php endif ?>
             <h5 class="float-left "><?= ($value->discount)? $value->price - $value->discount : $value->price?>$</h5>
-            <a href="<?= Url::to(['basket/'. $value->id .'add-item']) ?>" class="btn btn-success float-right">Add to Card</a>
+            <?php $id = $value->id?>
+            <span class="float-right <?= isset($cart["prod-$id"])? 'd-block' : 'd-none'?>" id="in-<?=$value->id?>">In cart</span>
+            <button class="btn float-right text-white cart <?= isset($cart['prod-'.$value->id])? 'd-none' : 'd-block'?>" id="<?=$value->id?>" style="background-color: #c1a35f">Add to Cart</button>
         </div>
       </div>
     </div>
   <?php  endforeach  ?>
 </div>
+
+<script>
+    $('.cart').click(function(e) {
+      let id = this.id;
+      $.ajax({
+            url: '/basket/add',
+            type: 'post',
+            data: {
+              id : id 
+            },
+            success: function(data){
+              $('#in-'+id).addClass('d-block');
+              $('#in-'+id).removeClass('d-none');
+              $('#'+id).addClass('d-none');
+              $('#'+id).removeClass('d-block');
+            }
+        });
+    });
+  </script>

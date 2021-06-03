@@ -26,7 +26,7 @@
     
     <!-- Table -->
   
-    <table class="table">
+    <table class="table" id="orders">
         <thead style="background-color: #22262A; color: white;">
         <tr>
             <th scope="col">#</th>
@@ -58,7 +58,7 @@
                     <td><?= $order->address ?></td>
                     <td> 
                         <?=  Html::a('View products', ['order','id' => $order->id], ['class' => 'btn btn-success']);  ?>
-                        <?=  Html::a('Delete', ['delete','id' => $order->id], ['class' => 'btn btn-danger']);  ?>
+                        <button id="<?= $order->id ?>" class="item btn btn-danger">Delete</button>
                     </td>
                 </tr>
         <?php endforeach ?>
@@ -85,3 +85,22 @@
         <?php } endforeach?>
     </ul>
 <?php endif?>
+
+<script>
+    $('.item').click(function(e){
+        e.preventDefault();
+        let index = this.parentNode.parentNode.rowIndex;
+        let id = $(this).attr('id');
+
+        $.ajax({
+            url: 'delete',
+            type: 'post',
+            data: {
+                'id' : id 
+            },
+            success: function(data){
+                document.getElementById("orders").deleteRow(index);
+            }
+        });
+    });
+</script>

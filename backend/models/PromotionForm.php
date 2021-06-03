@@ -38,8 +38,10 @@ class PromotionForm extends Model
 
             foreach($this->promotion_url as $file){
                 $fileName = md5(microtime() . rand(0, 1000));
-                $imagePath = '../../images/promotion/' . $fileName . '.' . $file->extension;
-                $file->saveAs($imagePath);
+                $imagePath = '../../images/product/' . $fileName . '.' . $file->extension;
+                $imagePath2 = '../../frontend/web/images/product/' . $fileName . '.' . $file->extension;
+                // $file->saveAs($imagePath);
+                $file->saveAs($imagePath2);
                 $result[] = $imagePath;
             }
             return $result;

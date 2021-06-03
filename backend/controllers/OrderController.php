@@ -51,7 +51,6 @@
                 $start_page = 1;
                 $end_page =(ceil($count / $nodesOnPage) > 10) ? 10 : ceil($count / $nodesOnPage);
             }
-            
 
             foreach($orders as $order){
                 if(isset($order->user_id)){
@@ -71,7 +70,6 @@
         }
         public function actionOrder($id)
         {
-
             $order = Order::find()->where(['id' => $id])->one();
  
             if(!$order) {
@@ -81,10 +79,9 @@
             $items_order = Item_Order::findAll(['order_id' => $id]);
             $user = User::find()->where(['id' => $order->user_id])->one();
             $guest = $order->guest;
-        
             $items = [];
-
             $status = '';
+
             foreach($items_order as $item) {
                 $product = Product::find()->where(['id'=> $item->product_id])->one();
                 $items[] =[
@@ -96,11 +93,7 @@
                 ];
             }
 
-            if($user) {
-                $status='user';
-            } else {
-                $status = 'guest';
-            }
+            $status = ($user)? 'user' : 'guest';
 
             return $this->render('order',[
                 'order' => $order,
@@ -111,16 +104,20 @@
             ]);
         }
 
-        public function actionDelete($id)
+        public function actionDelete()
         {
-            $order = Order::findOne(['id' => $id]);
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;// формат відповіді
 
-            if($order->delete(['id' => $id])){
-                Yii::$app->session->setFlash('success', "Order removed from database");
-            } else {
-                Yii::$app->session->setFlash('error', 'Error removing order from database');
+            if($_POST) {
+                $id = $_POST['id'];
+                $order = Order::findOne(['id' => $id]);
+    
+                if($order->delete(['id' => $id])){
+                    return false;
+                } else {
+                    Yii::$app->session->setFlash('error', 'Error removing order from database');
+                    return $this->redirect('index');
+                }
             }
-
-            return $this->redirect(['order/index']);
         }
     }

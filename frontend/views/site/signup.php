@@ -6,35 +6,58 @@
 
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
-
-$this->title = 'Signup';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'About us';
 ?>
-<div class="container-fluie">
-    <div class="site-signup">
-        <div class="row">
-            <div class="col-lg-2 col-md-2"></div>
-            <div class="col-lg-8 col-md-8">
-                <h1><?= Html::encode($this->title) ?></h1>
 
-                <p>Please fill out the following fields to signup:</p>
-            
-                <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
-
-                    <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-                    <?= $form->field($model, 'email') ?>
-
-                    <?= $form->field($model, 'password')->passwordInput() ?>
-
+<section id="mu-reservation">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mu-reservation-area">
+          <div class="mu-title">
+            <span class="mu-subtitle" style="letter-spacing: 5px;">Register</span>
+            <div></div>
+            <i class="fa fa-spoon"></i>              
+            <span class="mu-title-bar"></span>
+          </div>
+          <div class="mu-reservation-content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione quidem autem iusto, perspiciatis, amet, quaerat blanditiis ducimus eius recusandae nisi aut totam alias consectetur et.</p>
+            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">                       
+                    <?= $form->field($model, 'username')->textInput(['autofocus' => true,'placeholder' => 'Username']) ?>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">                        
+                    <?= $form->field($model, 'email', [
+                        'inputOptions' => [
+                            'placeholder' => 'Email'
+                        ]
+                    ]) ?>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">                        
+                    <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password']) ?>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">                        
+                    <?= $form->field($model, 'address')->textInput(['placeholder' => 'Address']) ?>
+                  </div>
+                </div>
+                <div class="col-md-6">
                     <div class="form-group">
-                        <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                        <?= Html::submitButton('Signup', ['class' => 'mu-readmore-btn', 'name' => 'signup-button']) ?>
                     </div>
-
-                <?php ActiveForm::end(); ?>
-            </div>
-            <div class="col-lg-2 col-md-2"></div>
+                </div>
+              </div>
+              <?php ActiveForm::end(); ?>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-
+  </div>
+</section>  

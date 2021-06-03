@@ -131,6 +131,7 @@ class BasketController extends Controller {
     public function actionIndex()
     {
         $idUser = Yii::$app->user->id;
+        $products = [];
 
         $promotions = Promotion::find()->where(['>' , 'dtEnd', date('Y-m-d')])->andWhere(['!=','category_id', 'NULL'])->one();
         if($idUser) {
@@ -171,30 +172,29 @@ class BasketController extends Controller {
         } else {
             if(isset($_COOKIE['delivery_food_basket'])){
                 $info = unserialize($_COOKIE['delivery_food_basket'], ["allowed_classes" => false]);
+                for($p = 0;$p< count($info); $p++) {
+                    $product = Product::find()->where(['id' => $info[$p]['product_id']])->one();
 
-              
-                foreach($info as $item){
-                    $product = Product::find()->where(['id' => $item['product_id']])->one();
-
-                    if($product!=null) {
+                    if($product != null) {
                         $products[] = [
                             'id' => $product->id,
                             'title' => $product->title,
                             'price' => $product-> price,
                             'url_image' => json_decode($product->url_image, true),
-                            'count' => $item['count'],
+                            'count' => $info[$p]['count'],
                             'discount' => $product->discount
                         ];
                     } else {
                         for($i = 0; $i<count($info); $i++) {
                             if($info[$i]['product_id'] == $item['product_id']) {
                                 array_splice($info, $i, 1);
-                                setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
+                                setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/", $_SERVER['SERVER_NAME']);//  time() +(60*60*24*10)) -> 10 days
                                 break;
                             }
                         }
                     }
                 }
+
                 $total = $this->getTotalPrice(null, $info)['total'];
                 $discount = $this->getTotalPrice(null, $info)['discount'];
 
@@ -203,7 +203,8 @@ class BasketController extends Controller {
                     'products' => $products,
                     'user' => User::find()->where(['id' => $idUser])->one(),
                     'total_sum' => $total,
-                    'discount_sum' => $discount
+                    'discount_sum' => $discount,
+                    'cart' => $info
                 ]);
             }
         }
@@ -216,69 +217,78 @@ class BasketController extends Controller {
             'discount_sum' => 0
         ]);
     }
-    public function actionAddItem($id)
+    public function actionAdd()
     {
         $idUser = Yii::$app->user->id;
-        
         if($idUser){
-            $order = Order::find()->where(['user_id' => $idUser])->andWhere(['=','status','new'])->one();
 
-            if($order == null ) 
-            {
-                $model = new Order;
-                $model->user_id = $idUser;
-                $model->status = 'new';
-                
-                if ($model->save()){
-                    $order = Order::find()->where(['user_id' => $idUser])->andWhere(['=','status','new'])->one();
+            if($_POST) {
+                $id = $_POST['id'];
+                $order = Order::find()->where(['user_id' => $idUser])->andWhere(['=','status','new'])->one();
+    
+                if($order == null ) 
+                {
+                    $model = new Order;
+                    $model->user_id = $idUser;
+                    $model->status = 'new';
+                    
+                    if ($model->save()){
+                        $order = Order::find()->where(['user_id' => $idUser])->andWhere(['=','status','new'])->one();
+                    }
+                }
+        
+                $item_Order =  Item_Order::find()->where(['product_id' => $id])->andWhere(['=','order_id', $order->id])->one();
+                $product = Product::find()->where(['id' => $id])->one();
+                    
+                if($item_Order == null){
+                    $new_item_order = new Item_Order;
+                    $new_item_order->order_id = $order->id;
+                    $new_item_order->product_id = $id;
+                    $new_item_order->price = $product->price;
+                    $new_item_order->save();
+                    return false;
                 }
             }
-    
-            $item_Order =  Item_Order::find()->where(['product_id' => $id])->andWhere(['=','order_id', $order->id])->one();
-            $product = Product::find()->where(['id' => $id])->one();
-                
-            if($item_Order == null){
-                $new_item_order = new Item_Order;
-                $new_item_order->order_id = $order->id;
-                $new_item_order->product_id = $id;
-                $new_item_order->price = $product->price;
-                $new_item_order->save();
-            }
+
         } else {
-            $info = [];
-            if(!isset($_COOKIE['delivery_food_basket'])){
+           
+            if($_POST) {
+                $info = [];
+                $id = $_POST['id'];
+
+                if(!isset($_COOKIE['delivery_food_basket'])){
+                    $product = Product::find()->where(['id'=> $id])->one();
+    
+                    $info[] = [
+                        'product_id'=> $product->id,
+                        'count' => 1,
+                        'price' => $product->price
+                    ];
+                    
+                     setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/",$_SERVER['SERVER_NAME']); //  time() +(60*60*24*10)) -> 10 days
+                  
+                    return false;
+                }
                 $product = Product::find()->where(['id'=> $id])->one();
+    
+                $info = unserialize($_COOKIE['delivery_food_basket'], ["allowed_classes" => false]);
+    
+                $check = array_filter($info, function($item) use ($id){
+                    return $item['product_id'] == $id;
+                });
+    
+                if(!$check) {
+                    $info[] = [
+                        'product_id'=> $id,
+                        'count' => 1,
+                        'price' => $product->price
+                    ];
+                    setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/", $_SERVER['SERVER_NAME']);//  time() +(60*60*24*10)) -> 10 days
+                }
 
-                $info[] = [
-                    'product_id'=> $product->id,
-                    'count' => 1,
-                    'price' => $product->price
-                ];
-                
-                setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
-             
-                return $this->redirect('index');
-            }
-            $product = Product::find()->where(['id'=> $id])->one();
-
-            $info = unserialize($_COOKIE['delivery_food_basket'], ["allowed_classes" => false]);
-
-            // чи є продукт в cookie
-            $check = array_filter($info,function($item) use ($id){
-                return $item['product_id'] == $id;
-            });
-
-            if(!$check) {
-                $info[] = [
-                    'product_id'=> $id,
-                    'count' => 1,
-                    'price' => $product->price
-                ];
-                setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
+                return false;
             }
         }
-    
-        return $this->redirect('index');
     }
 
     public function actionUpdateItem()
@@ -310,7 +320,8 @@ class BasketController extends Controller {
                         $product = Product::find()->where(['id' => $info[$i]['product_id']])->one();
                         $info[$i]['count'] = $_POST['count'];
                         $info[$i]['price'] = $product->price * $info[$i]['count'] ;
-                        setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
+                         setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/",$_SERVER['SERVER_NAME']);//  time() +(60*60*24*10)) -> 10 days
+                        //setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/",'zzz.com.ua');//  time() +(60*60*24*10)) -> 10 days
                         break;
                     }
                 }
@@ -430,7 +441,8 @@ class BasketController extends Controller {
             $order->address = $_POST['address'];
             if($order->save()) {
                 Yii::$app->session->setFlash('success', "Order booked");
-                setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
+                 setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/",$_SERVER['SERVER_NAME']);//  time() +(60*60*24*10)) -> 10 days
+                //setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/",'zzz.com.ua');//  time() +(60*60*24*10)) -> 10 days
             }
         }
 
@@ -448,7 +460,8 @@ class BasketController extends Controller {
             }
         } else {
             if(isset($_COOKIE['delivery_food_basket'])) {
-                setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
+                 setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/",$_SERVER['SERVER_NAME']);//  time() +(60*60*24*10)) -> 10 days
+                //setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/",'zzz.com.ua');//  time() +(60*60*24*10)) -> 10 days
             }
         }
 
@@ -487,10 +500,11 @@ class BasketController extends Controller {
                         }
                     }
                     if(count($info) == 0) {
-                        setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
-
+                         setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/",$_SERVER['SERVER_NAME']);//  time() +(60*60*24*10)) -> 10 days
+                        //setcookie('delivery_food_basket', "", time() + ( 60 * 60 * 24 * 10 ), "/",'zzz.com.ua');//  time() +(60*60*24*10)) -> 10 days
                     } else {
-                        setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/"); //  time() +(60*60*24*10)) -> 10 days
+                         setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/",$_SERVER['SERVER_NAME']);//  time() +(60*60*24*10)) -> 10 days
+                        //setcookie('delivery_food_basket', serialize($info), time() + ( 60 * 60 * 24 * 10 ), "/",'zzz.com.ua');//  time() +(60*60*24*10)) -> 10 days
                     }
                     return [
                         'total' => $this->getTotalPrice(null, $info)['total'],

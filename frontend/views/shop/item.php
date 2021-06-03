@@ -17,12 +17,32 @@
         <p><?= $product->description?></p>
         <div class="row">
             <div class="col-md-6">
-                <h2>Price: <?= $product->price ?> $</h2>
+                <h3>Price: <?= $product->price ?> $</h3>
             </div>
             <div class="col-md-6">
-                <a href="<?= Url::to(['basket/'. $product->id .'add-item']) ?>" class="btn btn-success w-100">Add to Cart</a>
+                <?php $id = $product->id; ?>
+                <h3 class="float-right <?= isset($cart["prod-$id"])? 'd-block' : 'd-none'?>" id="in-<?=$product->id?>">In cart</h3>
+                <button class="btn float-right text-white cart <?= isset($cart['prod-'.$id])? 'd-none' : 'd-block'?>" id="<?=$product->id?>" style="background-color: #c1a35f">Add to Cart</button>
             </div>
-
         </div>
     </div>
 </div>
+
+<script>
+    $('.cart').click(function(e) {
+      let id = this.id;
+      $.ajax({
+            url: '/basket/add',
+            type: 'post',
+            data: {
+              id : id 
+            },
+            success: function(data){
+              $('#in-'+id).addClass('d-block');
+              $('#in-'+id).removeClass('d-none');
+              $('#'+id).addClass('d-none');
+              $('#'+id).removeClass('d-block');
+            }
+        });
+    });
+</script>

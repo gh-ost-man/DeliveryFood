@@ -18,7 +18,7 @@ class ProductForm extends Model
             [['title', 'description'], 'string', 'message' => 'Invalid field type'],
             [['category_id'], 'integer', 'min' => 0],
             [['price'], 'double', 'min' => 0],
-            [['title', 'category_id', 'price'], 'required', 'message' => 'The value is required'],
+            [['title','description','category_id', 'price'], 'required', 'message' => 'The value is required'],
             // [['url_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
         ]; 
     }
@@ -42,7 +42,9 @@ class ProductForm extends Model
             foreach($this->url_image as $file){
                 $fileName = md5(microtime() . rand(0, 1000));
                 $imagePath = '../../images/product/' . $fileName . '.' . $file->extension;
-                $file->saveAs($imagePath);
+                $imagePath2 = '../../frontend/web/images/product/' . $fileName . '.' . $file->extension;
+                // $file->saveAs($imagePath);
+                $file->saveAs($imagePath2);
                 $result[] = $imagePath;
             }
             return $result;

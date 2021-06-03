@@ -35,7 +35,7 @@ $i = 1;
             ]
         );?>
   <!-- Table -->
-  <table class="table">
+  <table class="table" id="promotions">
     <thead style="background-color: #22262A; color: white;">
       <tr>
         <th scope="col">#</th>
@@ -54,12 +54,34 @@ $i = 1;
               <th scope="row"><?= $promo['title']; ?></th>
               <th scope="row"><?= $promo['promotion_value']; ?></th>
               <td> 
-                    <?=  Html::a('View', ['view','id' => $promo['id']], ['class' => 'btn btn-info']);  ?>
-                    <?=  Html::a('Update', ['update','id' => $promo['id']], ['class' => 'btn btn-update']);  ?>
-                    <?=  Html::a('Delete', ['delete','id' => $promo['id']], ['class' => 'btn btn-danger']);  ?>
+                <?=  Html::a('View', ['view','id' => $promo['id']], ['class' => 'btn btn-info']);  ?>
+                <?=  Html::a('Update', ['update','id' => $promo['id']], ['class' => 'btn btn-update']);  ?>
+                <button id="<?= $promo['id'] ?>" class="item btn btn-danger">Delete</button>
               </td>
           </tr>
       <?php endforeach ?>
     </tbody>
   </table>
 </div>
+
+<script>
+    $('.item').click(function(e){
+        e.preventDefault();
+        
+        let index = this.parentNode.parentNode.rowIndex;
+        
+                
+        let id = $(this).attr('id');
+        $.ajax({
+            url: 'delete',
+            type: 'post',
+            data: {
+                'id' : id 
+            },
+            success: function(data){
+                document.getElementById("promotions").deleteRow(index);
+            }
+        });
+    });
+
+</script>

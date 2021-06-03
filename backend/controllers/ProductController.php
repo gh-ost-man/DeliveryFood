@@ -80,6 +80,12 @@
                     $tovar->url_image = json_encode($imagePath);
                     
                     if($tovar->discount != null) {
+
+                        if($tovar->discount > $tovar->price) {
+                            Yii::$app->session->setFlash('error', 'The discount must be less than the price');
+                            return $this->redirect(['product/create']);
+                        }
+
                         $promo = Promotion::find()
                         ->where(['>' ,'dtEnd', date('Y-m-d')])
                         ->andWhere(['=','category_id',  $tovar->category_id])
@@ -144,6 +150,11 @@
                     }
                     
                     if($product->discount != null) {
+                        if($product->discount > $product->price) {
+                            Yii::$app->session->setFlash('error', 'The discount must be less than the price');
+                            return $this->redirect(['product/'.$id.'update']);
+                        }
+
                         $promo = Promotion::find()
                         ->where(['>' ,'dtEnd', date('Y-m-d')])
                         ->andWhere(['=','category_id',  $product->category_id])
@@ -161,7 +172,7 @@
                 } else {
                     Yii::$app->session->setFlash('error', 'Error updating product in database');
                 }
-                return $this->redirect(['product/index']);
+                return $this->redirect(['product/index?page='. $_GET['page']]);
             }
 
             $model->title = $product->title;
@@ -220,22 +231,27 @@
             return true;
         }
 
-        public function actionDelete($id)
+        public function actionDelete()
         {
-            $product = Product::findOne(['id' => $id]);
-            $images = json_decode($product->url_image, true);
-          
-            if($product->delete(['id' => $id])) {
-                foreach($images as $image){
-                    unlink($image);
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;// формат відповіді
+
+            if($_POST) {
+                $id = $_POST['id'];
+                $product = Product::findOne(['id' => $id]);
+                $images = json_decode($product->url_image, true);
+              
+                if($product->delete(['id' => $id])) {
+                    foreach($images as $image){
+                        unlink($image);
+                    }
+                    Yii::$app->session->setFlash('success', 'Success');
+                } else {
+                    Yii::$app->session->setFlash('error', 'Error removing product from database');
+                    return $this->redirect('index');
                 }
-
-                Yii::$app->session->setFlash('success', "The product was removed from the database");
-            } else {
-                Yii::$app->session->setFlash('error', 'Error removing product from database');
+    
+                return false;;
             }
-
-            return $this->redirect(['product/index']);
         }
 
         public function actionView($id)

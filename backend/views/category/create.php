@@ -6,11 +6,10 @@ use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use kartik\widgets\FileInput;
 
-
-
 $this->title = ($model->title)? 'Update category' :  'Create category';
 $this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <div class="panel panel-default">

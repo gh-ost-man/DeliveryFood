@@ -45,6 +45,13 @@ return [
                 '<controller>/<id:\d+><action>' => '<controller>/<action>'
             ],
         ],
+        'assetManager' => [
+            'basePath' => '@webroot/assets',
+            'baseUrl' => '@web/assets'
+       ],  
+       'request' => [
+           'baseUrl' => '/admin'
+       ]
     ],
     'params' => $params,
 ];
