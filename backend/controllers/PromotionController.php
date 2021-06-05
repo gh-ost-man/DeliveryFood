@@ -29,9 +29,6 @@
                     ],
                 ],
             ];
-
-            
-
         }
         public function actionIndex()
         {
@@ -45,13 +42,11 @@
             $promotion = Promotion::findOne(['id' => $id]);
             $images = json_decode($promotion->promotion_url);
             $category = Category::findOne(['id' => $promotion->category_id]);
-            $product = Product::findOne(['id' => $promotion->product_id]);
 
             return $this->render('view', [
                 'promotion' => $promotion,
                 'images' => $images,
                 'category' => $category,
-                'product' => $product
             ]);
         }
 
@@ -265,6 +260,5 @@
     
                 return false;
             }
-
         }
     }

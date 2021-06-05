@@ -61,7 +61,7 @@
                 <td><?= $product['description'] ?></td>
                 <td> 
                     <?=  Html::a('View', ['view','id' => $product['id']], ['class' => 'btn btn-info']);  ?>
-                    <?=  Html::a('Update', ['update','id' => $product['id']], ['class' => 'btn btn-update']);  ?>
+                    <?=  Html::a('Update', ['update','id' => $product['id'], 'page' => $page], ['class' => 'btn btn-update']);  ?>
                     <button id="<?= $product['id'] ?>" class="item btn btn-danger">Delete</button>
                 </td>
             </tr>

@@ -23,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1><?= $promotion->title?></h1>
         <h4>Value: <?= $promotion->promotion_value?></h4>
         <h3>Category: <?= ($category != null)? $category->title : 'None'  ?></h3>
-        <h3>Product: <?= ($product) ? $product->title : 'None' ?></h3>
         <h3>Date start: <?= $promotion->dtStart ?></h3>
         <h3>Date end: <?= $promotion->dtEnd ?></h3>
     </div>

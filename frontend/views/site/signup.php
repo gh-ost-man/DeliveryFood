@@ -6,7 +6,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
-$this->title = 'About us';
+$this->title = 'Sign up';
 ?>
 
 <section id="mu-reservation">

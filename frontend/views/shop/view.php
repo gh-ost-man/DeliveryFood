@@ -36,7 +36,7 @@
     transform: rotate(-45deg);
     left: 20px;
     top: 20px;
-    background-color: red;
+    background-color: #c1a35f;
     display: block;
     height: 100px;
     position: absolute;
@@ -48,7 +48,7 @@
     font-family: "HelveticaNeue-CondensedBold", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 700;
     /* top: -185px; */
-    /* top: 10px; */
+    top: 10px;
     left: 10px;
     display: block;
     text-align: center;
